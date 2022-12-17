@@ -1,0 +1,8 @@
+--save -dev   -> saving dep as dev 
+
+scripts>   "dev" : "nodemon ..."   >  npm run dev
+
+port> process.env.PORT || default|hardcode  
+
+urls>>  remove localhost. 
+

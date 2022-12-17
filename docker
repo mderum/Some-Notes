@@ -1,2 +1,6 @@
 docker run -d -p 8080:8080 mongo
 docker run d= background  p = port  image name:version
+
+
+MONGO_INITDB_ROOT_USERNAME =
+MONGO_INITDB_ROOT_PASSWORD

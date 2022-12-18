@@ -20,7 +20,7 @@ mongo db setup
 
 to create table and collections 
 
-client.db( name of databse ) 
+client.db( name of databse )  it will return a db reference use that to add collection 
 
 db.collection(' name of collection ' ) .insertOne(  { data}  ) 
 

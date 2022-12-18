@@ -24,3 +24,79 @@ client.db( name of databse )  it will return a db reference use that to add coll
 
 db.collection(' name of collection ' ) .insertOne(  { data}  ) 
 
+--save -dev   -> saving dep as dev 
+
+scripts>   "dev" : "nodemon ..."   >  npm run dev
+
+port> process.env.PORT || default|hardcode  
+
+urls>>  remove localhost. 
+
+
+
+
+mongo db setup 
+ require mongodb package >  mongodb.MongoClient to get client in var >   url = ''  and  db or table name = ''    > client.connect( url , { urlNewParser: true }, 
+ 
+ a call back method to handle error and  client () => {  if error   return do something    else do something }
+ 
+ )
+
+
+
+to create table and collections 
+
+client.db( name of databse )  it will return a db reference use that to add collection 
+
+db.collection(' name of collection ' ) .insertOne(  { data}  ) 
+insertMany(  [ a,b,c]    , a callback fx if required to handle error (err,res)=> {..fx....}  )
+
+
+res > will have what is inserted , number of ops , ids 
+
+
+//crud
+
+const  log=console.log
+//get package
+const mongodb = require('mongodb')
+
+//get client 
+  const client = mongodb.MongoClient
+
+  const connectionUrl = 'mongodb://127.0.0.1:27017'
+
+   const databaseName = 'task-manager'
+
+
+                    //   URL, parser , call back function        // to parse the urls correctly  
+client.connect(connectionUrl,{ useNewUrlParser: true} ,( error,client)=>{
+
+
+    if(error){
+       return log(' unable to connect')
+    }
+
+    log( ' connected successfully ')
+   const dbRef= client.db(databaseName)
+
+   dbRef.collection('tasks').insertMany
+   
+   
+   (
+    [    {  desc:' task1', completed :true},{  desc:'task 2', completed :false} ,{  desc:'task 3', completed :true}]
+    , (err,res)=>{
+
+
+        if(err) return log(' error in inserting ')
+
+
+        log(res)
+    }
+    )
+   log( ' inserted successfully ')
+
+ }  )
+
+
+

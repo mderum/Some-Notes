@@ -6,3 +6,13 @@ port> process.env.PORT || default|hardcode
 
 urls>>  remove localhost. 
 
+
+
+
+mongo db setup 
+ require mongodb package >  mongodb.MongoClient to get client in var >   url = ''  and  db or table name = ''    > client.connect( url , { urlNewParser: true }, 
+ 
+ a call back method to handle error and  client () => {  if error   return do something    else do something }
+ 
+ )
+

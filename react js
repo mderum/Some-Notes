@@ -1,0 +1,24 @@
+React start 
+
+an app module having a function   X (  that will return (   div or markups )  )  export this ->  export default  fx name;
+
+
+
+inside index js import that X  >  import X from "./X; import anything else;
+
+where you want to display it ReactDOM.createRoot(document.getElementById('root'));  root is a div you made in your html <classs=root> 
+
+root .render( < X />) render your X inside root
+
+to start npm start ..............
+
+
+Making your own components>>>
+
+make a js file >  a new fx  returning (  all  markup inside a parent div or element )  
+
+now import that in main component or app .  and place it in between return as markeup   <FunctionName> </FunctionName>
+
+
+for using a style ..  make a same name .css as X. then import './css'  in js function done.
+

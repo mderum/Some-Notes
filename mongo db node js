@@ -1,0 +1,99 @@
+//crud
+
+const log = console.log;
+//get package
+const mongodb = require("mongodb");
+
+//get client
+const client = mongodb.MongoClient;
+
+const connectionUrl = "mongodb://127.0.0.1:27017";
+
+const databaseName = "task-manager";
+
+//   URL, parser , call back function        // to parse the urls correctly
+client.connect(connectionUrl, { useNewUrlParser: true }, (error, client) => {
+  if (error) {
+    return log(" unable to connect");
+  }
+
+  log(" connected successfully ");
+  const dbRef = client.db(databaseName);
+
+  //  dbRef.collection('tasks').insertMany
+
+  //insert
+
+  //  (
+  //   [    {  desc:' task1', completed :true},{  desc:'task 2', completed :false} ,{  desc:'task 3', completed :true}]
+  //   , (err,res)=>{
+
+  //       if(err) return log(' error in inserting ')
+
+  //       log(res)
+  //   }
+  //   )
+  //  log( ' inserted successfully ')
+
+  //find one
+  //  dbRef.collection('tasks').find( {completed:true}   ,
+
+  //   (err,res)=>{
+  //     if(err) return log(' error in inserting ')
+
+  //     log(' find result : ', res)
+
+  //   }
+
+  //   )
+
+  //find all matching
+  // dbRef.collection('tasks').find( {completed:true}).toArray(  (err,res)=>{
+  //       if(err) return log(' error in inserting ')
+
+  //       log(' find result : ', res)
+
+  //     })
+
+  //update one
+
+  // dbRef
+  //   .collection("tasks")
+  //   .updateOne({ desc: "task 2" }, { $set: { completed: true } })
+  //   .then((result) => {
+  //     log("got updated ");
+  //   })
+  //   .catch((error) => {
+  //     log(" error occured ");
+  //   });
+
+  //updateoneEnd
+
+
+  //update Many 
+  // dbRef.collection('tasks').updateMany( { completed:true } , { $set:{completed:false }}  )
+  //   .then((result) => {
+  //     log("got updated all");
+  //   })
+  //   .catch((error) => {
+  //     log(" error occured ");
+  //   });
+
+
+  //delet many 
+
+  // dbRef.collection('tasks').deleteMany(  { completed:true})
+
+  dbRef.collection('tasks').deleteOne({ desc:'task 3' })
+   .then((result) => {
+      log("got deeleted ", result.deletedCount);
+    })
+    .catch((error) => {
+      log(" error occured ");
+    });
+
+
+
+
+
+});

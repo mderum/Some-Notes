@@ -1,0 +1,28 @@
+sample model createion 
+required validator npm .............
+const User = gose.model(
+  //model name..........
+  "User",
+
+  //fields and type..........
+  {
+    name: { type: String, required: true },
+    age: {
+      type: Number,
+      required: true,
+ //validator fx..................
+      validate(value) {
+        if (value < 10) {
+          throw new Error(" value cantbe less than 10");
+        }
+      },
+    },
+    email:{ type:String ,required:true, validate(value){
+
+      if( !validator.isEmail(value)){  throw new Error(' email not valid ') }
+
+    }}
+  }
+);
+
+

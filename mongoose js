@@ -1,28 +1,78 @@
-sample model createion 
-required validator npm .............
+const gose = require("mongoose");
+const validator = require("validator");
+
+gose.connect("mongodb://127.0.0.1:27017/task-manager-api", {
+  useNewUrlParser: true,
+  // useCreateIndex: true,
+});
+
 const User = gose.model(
-  //model name..........
+  //model name
   "User",
 
-  //fields and type..........
+  //fields and type
   {
     name: { type: String, required: true },
     age: {
+      default:0,
       type: Number,
       required: true,
- //validator fx..................
+
       validate(value) {
-        if (value < 10) {
+        if (value < 0) {
           throw new Error(" value cantbe less than 10");
         }
       },
     },
-    email:{ type:String ,required:true, validate(value){
+    email:{ type:String ,required:true, trim:true,lowercase:true,  validate(value){
 
       if( !validator.isEmail(value)){  throw new Error(' email not valid ') }
 
-    }}
+    }},
+    password:{type:String,required:true, trim:true,minlength:6}
   }
 );
 
 
+
+const Task = gose.model("Task", {
+  desc: { type: String,trim:true,required:true },
+  completed: { type: Boolean, optional:true, default:false },
+});
+
+
+const newUser = (name, age,email,password) => {
+  const user1 = new User({ name: name, age: age,email:email ,password:password});
+
+  user1
+    .save()
+    .then(() => {
+      log(user1);
+    })
+    .catch((error) => {
+      log("error :", error);
+    });
+};
+
+
+const newTask = (desc, completed) => {
+  const task1 = new Task({ desc: desc
+    // , completed: completed 
+  });
+
+  task1
+    .save()
+    .then(() => {
+      log(task1);
+    })
+    .catch((error) => {
+      log("error :", error);
+    });
+};
+
+const log = console.log;
+// newFunction();
+
+// newUser("zohan ", 2, "MD@md.com","rem  12   ");
+
+newTask("getting  a new phone ..       ", true)

@@ -97,6 +97,38 @@ client.connect(connectionUrl,{ useNewUrlParser: true} ,( error,client)=>{
    log( ' inserted successfully ')
 
  }  )
+ 
+ 
+ 
+ 
+ 
+ node 
+
+path with variable app.get("/tasks/:id"
+
+promise chaining 
+
+  fx( ).then (   { return a new promose}).then ().catch()
+
+  return a new fx with promise to chain as then 
+
+
+
+  aync and await 
+
+
+  create a fx = aync  () {
+    do all \
+
+    const x = await fx1 
+    const y = await fx2 
+    return x or y 
+  }
+
+
+  fx().then .catch
+ 
+ 
 
 
 

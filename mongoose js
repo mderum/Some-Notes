@@ -35,6 +35,14 @@ const User = gose.model(
 
 
 
+
+
+using mongoose query in app 
+
+ModelName.query 
+findone findById find (  {object})
+
+
 const Task = gose.model("Task", {
   desc: { type: String,trim:true,required:true },
   completed: { type: Boolean, optional:true, default:false },

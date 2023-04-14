@@ -1,0 +1,23 @@
+
+to use a html template templates = Jinja2Templates(directory="templates")
+ 
+ 
+ @app.get("/", response_class=HTMLResponse)
+async def show_form(request: Request):
+    return templates.TemplateResponse("date_form.html", {"request": request})
+    
+    template.TemplateResponse 'template name ' ,{ data transfer dictonary in key value pair Key:Value}
+    
+    #to send a data frame as table {  data : df.tohtml(escape  = False ) }
+    
+    ///////////////////////////////////////////////////
+    
+ @app.get('/items/{item_id}')   // url param / varible_ name 
+async def read_item(item_id : str  *declare type* ,  *query param* q:   *union of str or None can empty* Union[str , None ]=None ,   name:Type ,  name: list[ str ] ):
+    return { 'item_id': item_id, 'q':q}
+
+
+
+
+
+    

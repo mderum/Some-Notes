@@ -1,0 +1,166 @@
+Schelduling 
+
+
+@EnableScheduling  use on spring main class or a new dedicated class 
+, 
+@ConditionalOnProperty(name = "scheduler.enabled", matchIfMissing = true)   match if missing is the default value  , name is the property in yml 
+
+/////////////////////////////////////////
+
+
+ now add @Scheduled  to the method which we need to schedule 
+ 
+ condition for the annotated method 
+ 1. return void  2 .  should not accept any input parameters.
+ 
+ /////////////////////////////////////////
+ 
+ attributes of cron 
+ fixedDelay  ->  op occurs at fixed duration , like a sequence  ,**** it starts only if the previous method ends 
+ , so adding a delay of 4 sec and having rate of 2s will 
+ make the function to run only after 4s .
+ 
+ /////////////////////////////////////////
+ 
+ fixedRate  
+@Scheduled(fixedRate = 3000)
+  @Async   //  if missing new wont start without the previous one is completed  // alternate approach spring.task.scheduling.pool.size in yml to more 
+ >  op occurs at fixed rate even if the previous task is taking time main difference between delay(1) and rate(2) , 
+ next will execute in  a seperate thread.  ? non blocking 
+ 
+ 
+@Configuration
+@EnableScheduling
+@EnableAsync
+@ConditionalOnProperty(name="scheduler.enabled", matchIfMissing = true)
+public class SchedulerConfig {
+
+
+}
+
+
+/////////////////////////////////////
+
+
+initialDelay -  delay the op with a given timer for both types    @Scheduled(initialDelay = 2000, fixedRate = 3000)
+
+
+////////////
+
+specifying long values 
+
+  @Scheduled(name_of_Rate_String = "PT02S"))   PTO2H for 2 hrs and so on. 
+  
+  /////////////////////////////////////////////
+  
+externalize the values using application prop or yml 
+  @Scheduled(fixedDelayString = "${interval}")   ->>interval  in yml or prop file 
+  
+  
+ /////////////////////////////
+ 
+ Using unix cron types   @Scheduled(cron = "${interval-in-cron}")
+  
+  second, minute, hour, day of the month, month, day of the week, and optionally the year. 
+  
+  it will keep running 
+  after this seconds  ,after this minutes , after this hours , 1-31  date each day given , each month of the year  , each day of week 
+  
+  
+   ┌───────────── second (0-59)
+ │ ┌───────────── minute (0 - 59)
+ │ │ ┌───────────── hour (0 - 23)
+ │ │ │ ┌───────────── day of the month (1 - 31)
+ │ │ │ │ ┌───────────── month (1 - 12) (or JAN-DEC)
+ │ │ │ │ │ ┌───────────── day of the week (0 - 7)
+ │ │ │ │ │ │          (or MON-SUN -- 0 or 7 is Sunday)
+ │ │ │ │ │ │
+ * * * * * *
+
+   0 15 10 * * *  ( every 0th second, 15th minute, 10th hour, every day).
+   
+   /////////
+cron using string literals to simplify 
+@hourly,   0 0 * * * *
+@yearly,
+@monthly,
+@weekly, and
+@daily
+
+
+scheduler synchronization over multiple instances  ShedLock 
+<dependency>
+    <groupId>net.javacrumbs.shedlock</groupId>
+    <artifactId>shedlock-spring</artifactId>
+    <version>4.27.0</version>
+</dependency>
+
+<dependency>
+  <groupId>net.javacrumbs.shedlock</groupId>
+  <artifactId>shedlock-provider-jdbc-template</artifactId>
+  <version>4.27.0</version>
+</dependency>
+
+<dependency>
+  <groupId>com.h2database</groupId>
+  <artifactId>h2</artifactId>
+  <scope>runtime</scope>
+</dependency>
+
+
+
+/@EnableSchedulerLock(defaultLockAtMostFor = "10m")
+
+
+
+
+sample class 
+@Configuration
+@EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "10m")
+@EnableAsync
+@ConditionalOnProperty(name="scheduler.enabled", matchIfMissing = true)
+public class SchedulerConfig {
+  
+  @Bean
+  public LockProvider lockProvider(DataSource dataSource) {
+    return new JdbcTemplateLockProvider(
+        JdbcTemplateLockProvider.Configuration.builder()
+        .withJdbcTemplate(new JdbcTemplate(dataSource))
+        .usingDbTime() // Works on Postgres, MySQL, MariaDb, MS SQL, Oracle, DB2, HSQL and H2
+        .build()
+    );
+  }
+
+}
+
+
+
+
+
+// finally create a table 
+DROP TABLE IF EXISTS shedlock;
+
+CREATE TABLE shedlock(
+  name VARCHAR(64) NOT NULL, 
+  lock_until TIMESTAMP(3) NOT NULL,
+  locked_at TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3), 
+  locked_by VARCHAR(255) NOT NULL, 
+  PRIMARY KEY (name)
+);
+
+
+
+////////////////
+
+
+now lock the methods which are needed to be synced  
+
+
+
+  @Scheduled(cron = "${interval-in-cron}")
+  @SchedulerLock(name = "myscheduledTask")  ?>>  myscheduledTask any name 
+
+
+
+ 

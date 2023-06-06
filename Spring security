@@ -1,13 +1,8 @@
-compilance level issue for java  8
-
-<build>
-  <plugins>
-    <plugin>
-      <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
-        </configuration>
-    </plugin>
-  </plugins>
-</build>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+    
+    default setting>> user/password(generated in Console) 
+    
+    

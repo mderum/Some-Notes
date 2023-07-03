@@ -4,5 +4,39 @@
 		</dependency>
     
     default setting>> user/password(generated in Console) 
+
+
+//////////
+
+@componentScan("packge.x.y.x") if the package is not present in the main application bootstraper package .
+
+
+spring.security.user.name=username
+spring.security.user.password=test123@
+
+
+
+///////////////////////////////
+spring security internal flow 
+
+
+user enters the credentials >>>   request received by servlet container or tomcat server or web app >>> 
+
+now spring sec filters will monitor each request that is coming..  >>  
+determine wheather the resouce is proteceted or not >>   ? is authentication needed  1st time or is already authenticated. 
+
+
+>> 
+
+
+
+
+
+
+
+
+
+
+
     
     

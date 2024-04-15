@@ -1,0 +1,9 @@
+@autowired -> spring will inject this dep   types > field injection , setter , constructor
+
+
+@Controller ->  used only on a class that this class acts as a controller / used to mark a class as a web request handler / dispatcher  scans such classes 
+for mapped methods and detects @RequestMapping
+
+@SpringBootApplication -> to mark the main class of the spring application it contains ( @Configuration, @EnableAutoConfiguration, and @ComponentScan )
+
+@EnableAsync -> enable aysc fx 

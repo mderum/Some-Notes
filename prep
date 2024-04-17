@@ -7,3 +7,28 @@ for mapped methods and detects @RequestMapping
 @SpringBootApplication -> to mark the main class of the spring application it contains ( @Configuration, @EnableAutoConfiguration, and @ComponentScan )
 
 @EnableAsync -> enable aysc fx 
+
+
+ @Id ->      marks a field in a model class as the primary key. 
+
+
+@Service to indicate that they’re holding the business logic
+
+ @Repository to indicate that they’re dealing with CRUD operations,
+
+@Controller:   to handle user requests and return the appropriate response 
+
+
+IOC container - >  creates the objects, configures and assembles their dependencies, manages their entire life cycle  > using dependency injection 
+
+gets the information about the objects from a configuration file(XML) or Java Code or Java Annotations and Java POJO class. > called beans 
+
+type of ioc 
+BeanFactory 
+ApplicationContext   > uses BF type 
+>   main features >  creating | managing | configration help | manage dependencies 
+
+
+
+
+

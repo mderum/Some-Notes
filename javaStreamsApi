@@ -1,0 +1,32 @@
+
+       
+       Stream.generate(Math::random).limit(5).forEach(System.out::println);
+       
+       //chain 2 methods 
+      Stream.generate( ()-> Math.floor(Math.random()*100) ).limit(5).forEach(System.out::println);
+
+      // another method to generate random stream
+      Stream.generate(UUID::randomUUID).limit(5).forEach(System.out::println);
+
+      //stream of 
+      Stream.of(1,35,7,5).forEach(System.out::println);
+      //iterator 
+      Stream.iterate(0, n -> n+2).limit(20).forEach(x-> System.out.print(x+","));
+      
+      //collect as terminal operation 
+      List<String> fruits = Arrays.asList("apple", "banana", "cherry");
+      List<String> fruitsFiltered =fruits.stream().filter(x-> x.length() > 5 ).collect(Collectors.toList());
+      System.out.println(fruitsFiltered);
+      
+      //primitive type array 
+      int [] numArr = {1,6,7,44,77,22,77,10};
+      //method collect in interface IntStream cannot be applied to given types; 
+      //if collect is used directly on primitive types 
+      // here -> Arrays.stream(numArr).map(x-> x++ ).collect(Collectors.toList());
+      List<Integer> mappedNums=Arrays.stream(numArr).boxed().map(x-> ++x ).collect(Collectors.toList());
+      
+      System.out.println(mappedNums);
+
+
+      
+  

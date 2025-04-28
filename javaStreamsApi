@@ -1,4 +1,13 @@
+import java.util.*;
+import java.util.stream.*;
+import java.util.function.*;
 
+
+  
+  
+public class Main {
+
+    public static void main(String[] args) {
        
        Stream.generate(Math::random).limit(5).forEach(System.out::println);
        
@@ -14,7 +23,7 @@
       Stream.iterate(0, n -> n+2).limit(20).forEach(x-> System.out.print(x+","));
       
       //collect as terminal operation 
-      List<String> fruits = Arrays.asList("apple", "banana", "cherry");
+      List<String> fruits = Arrays.asList("avacado","apple", "banana", "cherry", "orange");
       List<String> fruitsFiltered =fruits.stream().filter(x-> x.length() > 5 ).collect(Collectors.toList());
       System.out.println(fruitsFiltered);
       
@@ -26,7 +35,164 @@
       List<Integer> mappedNums=Arrays.stream(numArr).boxed().map(x-> ++x ).collect(Collectors.toList());
       
       System.out.println(mappedNums);
-
+      
+      //     intermediate operations 
+      System.out.println( fruits.stream().filter(x-> x.startsWith("b")));
+      System.out.println( fruits.stream().map( x-> x.toUpperCase()));
+      System.out.println( fruits.stream().distinct());
+      System.out.println( fruits.stream().sorted());
+      System.out.println( fruits.stream().limit(2));
+      System.out.println( fruits.stream().skip(1));
+      System.out.println( fruits.stream().peek(s-> System.out.println("peeking:"+s)));
 
       
+      //intermediate lazy , no results produced utill a terminal operations is called
+      // terminal  produces final results , only 1 terminal operations can be
+      // at a time , stream gets consumed after a terminal op
+            System.out.println("count "+ fruits.stream().filter(x-> x.startsWith("b")).count());
+            System.out.println(  fruits.stream().min(String::compareTo));
+            System.out.println(  fruits.stream().max(String::compareTo));
+            System.out.println(  fruits.stream().anyMatch(x-> x.startsWith("c")));
+            System.out.println(  fruits.stream().allMatch(x-> x.startsWith("c")));
+            System.out.println(  fruits.stream().noneMatch(x-> x.startsWith("e")));
+            System.out.println(  fruits.stream().filter(x-> x.startsWith("a")).findFirst());
+            System.out.println(  fruits.stream().findAny());
+
+      System.out.println( fruits.stream().distinct().reduce( (x,y)-> x+"-"+y).get());
+
+
+//filtering 
+//takes a predicate logic or combination to perform filterring
+fruits.stream().filter(x-> x.startsWith("c")).collect(Collectors.toList()).forEach(
+  System.out::println);
+      
+      Predicate<String> pred= x -> x.startsWith("b");
+      
+    fruits.stream().filter(pred).collect(Collectors.toList()).forEach(
+  System.out::println);  
+      
+      Predicate<String> pred2= x-> x.startsWith("o");
+      
+      System.out.println("----------");
+      
+      Predicate<String> combinedPred= pred.or(pred2);
+         
+    fruits.stream().filter(combinedPred).collect(Collectors.toList()).forEach(
+  System.out::println);  
   
+        System.out.println("----------");
+        
+   
+   //map 
+   //takes a function to apply transformation logic on elements of stream 
+   
+   // Function<Integer, Integer> func1 = x-> x+2 ;
+        Function<String,String> func1 = x-> x.toUpperCase();
+        
+        //foreach  except a consumer / void function
+        fruits.stream().map(func1).forEach(System.out::println);
+                System.out.println("----------");
+
+        Function<String,String> fuc2 = x-> { if(x.length() == 6) return (x+"-"+x.length()); 
+        
+          else return x;
+        };
+
+        System.out.println("----------");
+
+        fruits.stream().map(fuc2).forEach(System.out::println);
+        
+        System.out.println("----------");
+
+        //distinct  override equals and hascode() for comparing custom objects 
+        fruits.stream().distinct().forEach(System.out::println);
+        System.out.println("----------");
+        
+        
+        List<Person> personList = 
+               Arrays.asList( 
+          new Person("erum",25),
+           new Person("abc",30),
+                    new Person("erum",25),
+                                        new Person("ark",25),
+
+          new Person("bhumi",24)
+          );
+        
+       personList.stream().distinct().forEach(System.out::println);
+   /* if no hascode() and equals() method overriding 
+        output will be like 
+        erum-25
+        erum-25
+        Somi-24*/
+        
+        //overriding equals and hascode methods 
+        /*
+           @Override
+    public boolean equals(Object o){
+      Person p =(Person) o;
+      return this.age==p.age && Objects.equals(this.name,p.name);
+    }
+    
+    @Override
+    public int hashCode(){
+      return Objects.hash(age,name);
+    }
+    
+    results will be 
+    ----------
+erum-25
+Somi-24
+        */
+        System.out.println("----------");
+
+        personList.stream().sorted(Comparator.comparing(Person::getAge)).forEach(System.out::println);
+        
+        System.out.println("----------");
+
+        personList.stream()
+        .sorted( (x,y)->Integer.compare(y.getAge(),x.getAge() ) )
+        .forEach(System.out::println);
+ 
+        System.out.println("----------");
+
+        personList.stream()
+        .sorted( Comparator.comparing(Person::getAge,Comparator.reverseOrder())
+        .thenComparing(Person::getName)
+        )
+        .forEach(System.out::println);
+
+  }
+}
+
+
+
+    class Person{
+    private String name;
+    private int age;
+      
+      
+        public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+    
+    public String toString(){
+      return this.name+"-"+this.age;
+    }
+    
+    @Override
+    public boolean equals(Object o){
+      Person p =(Person) o;
+      return this.age==p.age && Objects.equals(this.name,p.name);
+    }
+    
+    @Override
+    public int hashCode(){
+      return Objects.hash(age,name);
+    }
+    
+  }

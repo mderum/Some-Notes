@@ -162,7 +162,173 @@ Somi-24
         )
         .forEach(System.out::println);
 
-  }
+
+        System.out.println("----------");
+    
+       System.out.println( IntStream.range(0,100).filter(x-> x> 51).count());
+       
+       
+       //min max returns a optional depending on stream type 
+       //here optionalInt
+         System.out.println( IntStream.range(0,100).filter(x-> x> 51).min().getAsInt());
+         System.out.println( IntStream.range(0,100).filter(x-> x> 51).max().getAsInt());
+         System.out.println( IntStream.range(0,100).filter(x-> x> 51).max().orElse(-1));
+         
+         //short circuit 
+ 
+         
+              System.out.println(  
+           Arrays.asList("erumsdd" , "kokoddddd", "mannuind", "purvind",
+           "kokoddasddddd", "mannsadduind", "pursdsadvind",
+           "koasdadkoddddaad", "mannasdasdauind", "puasdadrvind",
+           "erusasdmsdd" , "kokodsdsddddd", "maaaansdsdnuind", "puaarvsdsdind",
+           "kokosaddasddddd", "mannsadduisdsdnd", "pusdrsdsadvind",
+           "koasdadkoaaddddd", "mannasdazzzsdauind", "puasdazzdrvind").stream()
+           .anyMatch(x-> x.length() >6 )
+           
+           ); 
+        System.out.println("----------");
+         
+              System.out.println(  
+           Arrays.asList("erumsdd" , "kokoddddd", "mannuind", "purvind",
+           "kokoddasddddd", "mannsadduind", "pursdsadvind",
+           "koasdadkoddddaad", "mannasdasdauind", "puasdadrvind",
+           "erusasdmsdd" , "kokodsdsddddd", "maaaansdsdnuind", "puaarvsdsdind",
+           "kokosaddasddddd", "mannsadduisdsdnd", "pusdrsdsadvind",
+           "koasdadkoaaddddd", "mannasdazzzsdauind", "puasdazzdrvind").stream()
+           .allMatch(x->  x.getClass().getSimpleName().equals("String") )
+           
+           );         
+        System.out.println("----------");
+  
+  
+              System.out.println(  
+           Arrays.asList("erumsdd" , "kokoddddd", "mannuind", "purvind",
+           "kokoddasddddd", "mannsadduind", "pursdsadvind",
+           "koasdadkoddddaad", "mannasdasdauind", "puasdadrvind",
+           "erusasdmsdd" , "kokodsdsddddd", "maaaansdsdnuind", "puaarvsdsdind",
+           "kokosaddasddddd", "mannsadduisdsdnd", "pusdrsdsadvind",
+           "koasdadkoaaddddd", "mannasdazzzsdauind", "puasdazzdrvind").stream()
+           .allMatch(x->  x.getClass().getSimpleName().equals("String") )
+           
+           );         
+
+
+        System.out.println("----------");
+  
+  
+              System.out.println(  
+           Arrays.asList("erumsdd" , "kokoddddd", "mannuind", "purvind",
+           "kokoddasddddd", "mannsadduind", "pursdsadvind",
+           "koasdadkoddddaad", "mannasdasdauind", "puasdadrvind",
+           "erusasdmsdd" , "kokodsdsddddd", "maaaansdsdnuind", "puaarvsdsdind",
+           "kokosaddasddddd", "mannsadduisdsdnd", "pusdrsdsadvind",
+           "koasdadkoaaddddd", "mannasdazzzsdauind", "puasdazzdrvind").stream()
+           .noneMatch(x->  x.getClass().getSimpleName().equals("Int") )
+           
+           ); 
+           
+          
+          
+          //reduce  takes accumulator , or identity + accumulator 
+          //, identity+ accumulator + combiner  
+          
+        System.out.println("----------");
+          
+          System.out.println(IntStream.range(1,9).reduce( (x,y)-> x+y));
+     
+                     System.out.println(Stream.of(1,4,5,8)
+                     .reduce(0, (x,y)-> { 
+                       System.out.println("x:"+x+"y-"+y);
+                      return x+y; 
+                     }
+                     ));
+ 
+ 
+         System.out.println("----------");
+
+      
+                     System.out.println(Stream.of(1,4,5,8,7,2)
+                     .reduce(0, (x,y)-> { 
+                       System.out.println("x:"+x+"y-"+y);
+                       return x+1; 
+                     } , 
+                     (a,b) -> a+b
+                     )); 
+ 
+         System.out.println("----------");
+
+
+// collect() 
+//duplicate check is not there 
+//so adding any deuplicate key will throw exception for map
+System.out.println(Stream.of("eth","vidt","Kt","S").
+map(String::toUpperCase).collect(Collectors.toMap(x->x ,x->x.length())));
+
+//map with a merge function 
+//so adding any deuplicate key will throw exception for map
+//merge fx should retur type simila to value Type
+System.out.println(Stream.of("eth","vidt","Kt","S","S").
+map(String::toUpperCase).collect(Collectors.toMap(x->x, x->x.length(),(a,b)->a+b     )));
+
+         System.out.println("----------");
+         System.out.println("----------");
+
+//map also takes a supplier 
+		
+		LinkedHashMap<String, String> lhm=	Stream.of("eth","vidt","Kt","S","S").
+			collect(Collectors
+				.toMap(x->x, 
+				String::toUpperCase,
+				(a,b)->a+","+b , 
+				LinkedHashMap::new));
+				
+		System.out.println(lhm);
+		
+// grouping in toMap() 
+
+    Map<Integer, List<Person>>  ageGrouping =  Arrays.asList( new Person("erum",25) , 
+              new Person("xavier",25),
+              new Person("kim",27),
+              new Person("kelly",22)).stream().
+              collect(Collectors.groupingBy(Person::getAge));
+
+System.out.println("ageGrouping-"+ageGrouping);
+
+
+// grouping in toMap() 
+// grouping by something and telling what key value logic to use while mapping 
+
+ 	   Map<Integer, Map<String, Integer>>   ageGroupingWithKeyValue =  Arrays.asList( new Person("erum",25) , 
+              new Person("xavier",25),
+              new Person("kim",27),
+              new Person("kelly",22)).stream().
+              collect(Collectors.groupingBy(Person::getAge , Collectors.toMap(x->x.getName(),x-> x.getAge())));
+
+System.out.println("ageGroupingWithKeyValue-"+ageGroupingWithKeyValue);
+
+
+
+
+//removes duplicate automatically
+System.out.println(Stream.of("eth","vidt","Kt","S","S").
+map(String::toUpperCase).collect(Collectors.toSet()));
+
+
+
+
+//optional 
+         System.out.println("----------");
+
+Optional<Integer> iop = Optional.ofNullable(2);
+
+
+          System.out.println("iop"+iop.orElse(-1));
+          System.out.println("iop-map-"+iop.map(x-> x*x ).get());
+
+ 
+                     
+    }
 }
 
 
@@ -181,7 +347,7 @@ Somi-24
     public int getAge() { return age; }
     
     public String toString(){
-      return this.name+"-"+this.age;
+      return "Person["+  this.name+"-"+this.age;
     }
     
     @Override

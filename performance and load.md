@@ -12,3 +12,14 @@
 >use timeout on txns
 >lock ordering > optimistic (prevents conflict between 2 )  pessimistic( blocks others from modifying )
 >Idempotency > each txn should be unique 
+Resource locking > although usefull but might not be the best selection in some cases.  (Redisson, Zookeeper, or Consul)
+
+**For load management**
+Horizontal scaling -> adding more machine or nodes 
+Vertical scaling -> upgrading current system with more powerfull resources 
+
+Scale  using Kubernates or Docker
+Load balancing and caching 
+@Aysnc to offload non critical processes 
+Rate Limiting -> clicking multiple times in frontend 
+@tranasctional for failures 

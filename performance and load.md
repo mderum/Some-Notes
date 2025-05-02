@@ -125,7 +125,9 @@ Left -> relation is optional
 
 ***2. optimize slow DB queries?** 
 > prevent resource exhaustion  ->  DB connection or thread pool exhaustion
- 2.1 Database Connection Pooling
+
+
+2.1 Database Connection Pooling
 
 Hikari CP
 {spring.datasource.hikari.maximum-pool-size=20  maximum avalilable in service  at any point threshold limit

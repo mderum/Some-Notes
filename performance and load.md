@@ -263,6 +263,26 @@ Patters
 
 >Null caching avoid hits for null results
 
+>cache coherence    -> keeping consistant with underlying DB , i made some changes manullay in DB , now cache becomes inconsistence.
+What we can do? update/evict chache on DB changes in API endpoints , use distributed cache systems like redis can provide message BUS, tools like debezium + kafka  to listen DB changes events and update the cache accordingly,
+
+
+**cache algo**
+
+>LRU least recently used removed first
+
+>LFU least access frequency removed
+
+> FIFO
+
+>MRU
+
+>ARC (Adaptive Replacement Cache) Balances between recency and frequency better than LRU/LFU.
+
+>Random
+
+Caffeine’s W-TinyLFU performs better in most application 
+
 
 >Simple cache  whithin the service not shared with other service 
 {

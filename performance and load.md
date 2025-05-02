@@ -53,8 +53,73 @@ Rate Limiting -> clicking multiple times in frontend
 
 
 
-**Distributes Transactions** 
+**Distributed Transactions** 
 A *atomic ->  all the txn bundled either fails or succeeds* C *consistance* I *Isolated* D *durable* 
 
 
-  
+
+---
+
+
+**optimize slow DB queries?** 
+
+>print sql queries for debugging
+spring.jpa.show-sql=true
+          .properties.hibernate.format_sql=true  (pretty-printing)
+
+>Log actual parameter values
+logging.level.org.hibernate.SQL=DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+
+>APM tools New Relic Datadog APM Elastic APM
+    <artifactId>spring-boot-starter-actuator</artifactId>
+    <artifactId>micrometer-registry-prometheus</artifactId>
+management.endpoints.web.exposure.include=health,info,metrics,prometheus
+management.endpoint.prometheus.enabled=true
+management.endpoints.web.base-path=/actuator
+
+monitor , trace , detection , tracking, visualize 
+
+>Query level
+-add index for where and Join columns 
+-select only needed columns not *
+- Use optimised query for selects ( N+1 problem for parent 1 Q for related childs N Q )
+  Here use JPQL *JOIN FETCH* (fetches linked entity with the query, can get nested using multiple joins)
+
+  @Query("""
+    SELECT u FROM User u
+    JOIN FETCH u.orders o
+    JOIN FETCH o.product
+    JOIN FETCH u.profile
+    WHERE u.id = :id
+""")
+User findUserWithOrdersAndProductsAndProfile(@Param("id") Long id);
+
+-Use @EntityGraph
+  @EntityGraph(attributePaths = {"orders", "orders.product", "profile"}) 
+  fetches nested records like join fetch
+
+>Paginations
+-offest pargination -> slow , inconsistent if data changes in between,
+SELECT * FROM users ORDER BY id LIMIT 10 OFFSET 1000;
+
+-keyset pagination 
+SELECT * FROM users WHERE id > :lastSeenId ORDER BY id LIMIT 10;
+
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    @Query("SELECT u FROM User u WHERE u.id > :lastId ORDER BY u.id ASC")
+    List<User> findNextPage(@Param("lastId") Long lastId, Pageable pageable);
+}
+
+> filter
+use date ranges , paginations , conditions, Stream , @Entity { @BatchSize(size = 10) }  ,split data process
+
+>Proper joins
+Inner -> related entry must be present
+Left -> relation is optional
+
+
+
+

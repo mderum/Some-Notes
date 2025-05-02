@@ -58,10 +58,12 @@ A *atomic ->  all the txn bundled either fails or succeeds* C *consistance* I *I
 
 
 
----
+-----------------------------------------------------------------------------
+
+***Issues and solutions***
 
 
-**optimize slow DB queries?** 
+**1. optimize slow DB queries?** 
 
 >print sql queries for debugging
 spring.jpa.show-sql=true
@@ -121,5 +123,6 @@ Inner -> related entry must be present
 Left -> relation is optional
 
 
-
+***2. optimize slow DB queries?** 
+> prevent resource exhaustion
 

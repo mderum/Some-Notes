@@ -235,6 +235,34 @@ public class AsyncService {
 ---
 
 3.4 Caching at various levels 
+>Im memory cache(simple cache)
+>Ehcache local disk+ mem with TTL
+>caffine cache  in mem HIgh perf
+>redis  distributed large/multi instance apps
+
+
+Patters 
+>Cache aside (lazy loading) -> check cache first if missing > load > put in cache | for a get Call
+
+>Read Through  check cache first if missing > read from DB automatically. Required 3rd party cache  like Redis and Ehcache  with read-through support
+
+>write through  on update data is written to both DB and cache ( happens automaticaly in third party cache like redis 
+
+>Write BEhind  write to cache > update in DB in batches (Aysnc) . A persistance is needed like Redis stream ,  grid like GEODE have write behind feature
+ consistency is not guarenteed, errors may come
+
+>Cache invalidation
+
+>Cache warming -> preload frequently used data
+
+>Cache BAtching / bulk caching ->  bulk caching in one go
+
+>Cache stampede prevention ->  for same data their may be Mx calls for DB @Cacheable(sync=true) to prevent
+
+>TTL expiry  set to evict globally
+
+>Null caching avoid hits for null results
+
 
 >Simple cache  whithin the service not shared with other service 
 {
@@ -268,7 +296,7 @@ public class AsyncService {
 
 >Caching with Redis (Distributed Caching)   shared with services
 
-{
+    {
 
     <artifactId>spring-boot-starter-data-redis</artifactId>
     <artifactId>spring-boot-starter-cache</artifactId>
@@ -296,5 +324,15 @@ public class AsyncService {
  
     }
 
-}
+    }
+
+
+---
+
+3.5 Circuit breakers 
+3.6 auto scailing and monitoring 
+3.7 load balancing 
+
+
+
 

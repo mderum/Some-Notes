@@ -230,3 +230,71 @@ public class AsyncService {
     }
 }
 
+
+
+---
+
+3.4 Caching at various levels 
+
+>Simple cache  whithin the service not shared with other service 
+{
+
+    @SpringBootApplication
+    @EnableCaching
+    spring.cache.type=simple  
+
+    @Cacheable(value = "orders", key = "#customerId")  // put this key orderid inside the cache named orders  , can be used at class level also 
+    public Order getOrderByCustomerId(Long customerId) {
+    return orderRepository.findByCustomerId(customerId);
+    }
+    }
+    
+    @CacheEvict(value = "users", key = "#userId")  // remove for given keyid 
+    @CachePut(value = "productCache", key = "#product.id")  //update the given key in cache 
+    @CacheConfig(cacheNames = "productCache") on class define a cahce for all method common cache to use 
+  
+    @Caching(   multiple @ together 
+    cacheable = @Cacheable(value = "productCache", key = "#productId"),
+    evict = @CacheEvict(value = "productCache", key = "#productId")
+      )
+      
+      @Cacheable(value = "productCache", key = "#productId", unless = "#result.price < 100") here result is the return type that is product
+    public Product getProductById(Long productId) {
+        return productRepository.findById(productId);
+    }
+
+
+
+
+>Caching with Redis (Distributed Caching)   shared with services
+
+{
+
+    <artifactId>spring-boot-starter-data-redis</artifactId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+
+    > {
+      
+      spring.cache.type=redis   // Use Redis for caching
+      spring.redis.host=localhost    // Redis server address 
+      spring.redis.port=6379        // Redis server port
+      spring.redis.timeout=2000     // Timeout for Redis connection in milliseconds
+      spring.cache.redis.time-to-live=60000  // Cache TTL ( time to live ) for 1 minute reddis keeps the expiry time with key_Expiry to check 
+      spring.redis.password=       # Optional: Redis password (if applicable)
+
+    spring.redis.pool.max-active=10        # Maximum number of active Redis connections
+    spring.redis.pool.max-idle=5           # Maximum number of idle Redis connections
+    spring.redis.pool.min-idle=2           # Minimum number of idle Redis connections
+    spring.redis.pool.max-wait=2000        # Maximum wait time for a Redis connection (milliseconds)
+
+
+    }
+
+    {
+
+        @Cacheable(value = "products", key = "#productId")  // Cache the product by productId in Redis
+ 
+    }
+
+}
+

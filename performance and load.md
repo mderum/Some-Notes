@@ -127,7 +127,7 @@ Left -> relation is optional
  
 DB connection or thread pool exhaustion
  
-2.1 Database Connection Pooling
+3.1 Database Connection Pooling
 
 Hikari CP
 {
@@ -157,7 +157,7 @@ Hikari CP java
 }
 
 ---
-2.1 Thread Pool Management
+3.2 Thread Pool Management
 
 {
 
@@ -208,4 +208,25 @@ public class AsyncService {
     }
 }
 
+
+3.3 Rate Limiting with Bucket4j (Per IP or Per User)  bucket4j-core  (complex custom logic )  bucket4j-spring-boot-starter ( simple config )
+
+{
+
+    spring:
+      bucket4j:
+        enabled: true  # Enable Bucket4j for rate limiting
+        limits:
+          - name: apiRateLimit  # Define a unique name for the rate limit configuration
+            capacity: 1000       # The maximum number of tokens (or requests) allowed in the bucket at any time.
+            refillPeriod: 1      # Time period (in seconds) after which the bucket is refilled with tokens.
+            refillTokens: 1000   # Number of tokens (requests) to be refilled every time period.
+            exceededMessage=Rate limit exceeded. Please try again later.
+
+  @GetMapping("/api/test")
+    @RateLimit(name = "apiRateLimit")  // Use the configured rate limit name
+    public String testRateLimit() {
+        return "Request successful!";
+    }
+}
 

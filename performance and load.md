@@ -124,5 +124,29 @@ Left -> relation is optional
 
 
 ***2. optimize slow DB queries?** 
-> prevent resource exhaustion
+> prevent resource exhaustion  ->  DB connection or thread pool exhaustion
+ 2.1 Database Connection Pooling
 
+Hikari CP
+{spring.datasource.hikari.maximum-pool-size=20  maximum avalilable in service  at any point threshold limit
+spring.datasource.hikari.minimum-idle=5   minimum number of idle to be present at any point
+spring.datasource.hikari.idle-timeout=30000  after this time eligible for removal 
+spring.datasource.hikari.max-lifetime=600000}  approx lifetime  when  not in use
+
+these hikari settings doest give a dynamic approch based on load, everything is manual. 
+
+Hikari CP java
+@Bean
+public DataSource dataSource() {
+    HikariDataSource dataSource = new HikariDataSource();
+    dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/yourdb");
+    dataSource.setUsername("user");
+    dataSource.setPassword("password");
+    dataSource.setMaximumPoolSize(20); // Adjust as needed ,can add minimum idle here too
+    return dataSource;
+}
+
+
+
+>Thread Pool Management
+>

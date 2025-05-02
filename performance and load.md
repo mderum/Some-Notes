@@ -122,33 +122,90 @@ use date ranges , paginations , conditions, Stream , @Entity { @BatchSize(size =
 Inner -> related entry must be present
 Left -> relation is optional
 
-
-***2. optimize slow DB queries?** 
-> prevent resource exhaustion  ->  DB connection or thread pool exhaustion
-
-
+---
+***3. prevent resource exhaustion** 
+ 
+DB connection or thread pool exhaustion
+ 
 2.1 Database Connection Pooling
 
 Hikari CP
-{spring.datasource.hikari.maximum-pool-size=20  maximum avalilable in service  at any point threshold limit
-spring.datasource.hikari.minimum-idle=5   minimum number of idle to be present at any point
-spring.datasource.hikari.idle-timeout=30000  after this time eligible for removal 
-spring.datasource.hikari.max-lifetime=600000}  approx lifetime  when  not in use
+{
 
-these hikari settings doest give a dynamic approch based on load, everything is manual. 
+      spring.datasource.hikari.maximum-pool-size=20  maximum avalilable in service  at any point threshold limit
+      spring.datasource.hikari.minimum-idle=5   minimum number of idle to be present at any point
+      spring.datasource.hikari.idle-timeout=30000  after this time eligible for removal 
+      spring.datasource.hikari.max-lifetime=600000 approx lifetime  when  not in use
+
+      these hikari settings doest give a dynamic approch based on load, everything is manual. 
+
+}  
+
 
 Hikari CP java
+{
+
+          @Bean
+          public DataSource dataSource() {
+              HikariDataSource dataSource = new HikariDataSource();
+              dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/yourdb");
+              dataSource.setUsername("user");
+              dataSource.setPassword("password");
+              dataSource.setMaximumPoolSize(20); // Adjust as needed ,can add minimum idle here too
+              return dataSource;
+          }
+}
+
+---
+2.1 Thread Pool Management
+
+{
+
+            spring.task.execution.pool.core-size=10   idle minimum can expand upto 50
+            spring.task.execution.pool.max-size=50    can expand upto max 50
+            spring.task.execution.pool.queue-capacity=100  number of tasks that can be queued after that rejected
+}
+
 @Bean
-public DataSource dataSource() {
-    HikariDataSource dataSource = new HikariDataSource();
-    dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/yourdb");
-    dataSource.setUsername("user");
-    dataSource.setPassword("password");
-    dataSource.setMaximumPoolSize(20); // Adjust as needed ,can add minimum idle here too
-    return dataSource;
+public Executor taskExecutor() {
+
+                ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+                executor.setCorePoolSize(10);
+                executor.setMaxPoolSize(50);
+                executor.setQueueCapacity(100);
+                executor.setThreadNamePrefix("async-task-");
+                executor.initialize();
+                return executor;
+}
+
+
+Override for rejection policy and lagging
+@Configuration
+@EnableAsync
+public class AsyncConfig {
+
+    @Bean(name = "applicationTaskExecutor")
+    public TaskExecutor taskExecutor(TaskExecutorBuilder builder) {
+        return builder
+                .rejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy()  //call your custom method here**)
+                .build();
+    }
 }
 
 
 
->Thread Pool Management
->
+@Service
+public class AsyncService {
+
+    @Async("applicationTaskExecutor")  //rejection policy here 
+    public void processTask(int taskId) {
+        System.out.println("Task " + taskId + " running on thread: " + Thread.currentThread().getName());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+

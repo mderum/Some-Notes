@@ -27,4 +27,16 @@ Containerization and deployment (AWS)
 ---
 
 >EKS ECR with docker > build jar > create docker image >  create ECR repo > login CLI > build if not done > tag > push  > now create EKC cluster > connect to EKS update kube config >
- create service ( kind=service  , image = uri of ECR we just uploaded)   and deployment yml ( kind = deployment ) > apply in ctl  > get svc > use url to access 
+ create service ( kind=service  , image = uri of ECR we just uploaded)   and deployment yml ( kind = deployment ) > apply in ctl  > get svc > use url to access
+
+
+---
+
+>Lambda AWS -> serverless compute  , manages scailing , pay per the time used , build jar (should have aws-spring-boot arch type)
+   > create a new function > runtime selection > done >  edit runtime settings  provide fully qualified name package.class::method in handler >   test and check  > now goto api gateway >
+   > create new resouce -> put path ( copy from the yml generated in project ) {proxy+} > define method > lambda proxy >  choose yours > create > deploy > here invoke url is the ROOT
+
+
+> RDS >   create  >select DB +version > get endpoint > use in your yml or env
+
+>EBS  (PaaS) create new > select platform > DB > configure >  create app env > deploy 

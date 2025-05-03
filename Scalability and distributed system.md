@@ -16,5 +16,15 @@ Containerization and deployment (AWS)
 
 >  create service and deployment yml on EC2  > apply yaml > get public ip of LB
 
+---
 
 >EC2 simple > launch a EC2 > get key > SSH into EC2 using key and public ip > upload jar  (filezilla/putty) > run jar using SSH > add security group for inbound tarrif from specific IP
+
+---
+>EC2 + S3 >   Create a EC2 and S3 bucket > upload jar > get presingned URL > SSH into EC2 wget with url > install java > run > check
+
+
+---
+
+>EKS ECR with docker > build jar > create docker image >  create ECR repo > login CLI > build if not done > tag > push  > now create EKC cluster > connect to EKS update kube config >
+ create service ( kind=service  , image = uri of ECR we just uploaded)   and deployment yml ( kind = deployment ) > apply in ctl  > get svc > use url to access 

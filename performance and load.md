@@ -350,6 +350,54 @@ Caffeine’s W-TinyLFU performs better in most application
 ---
 
 3.5 Circuit breakers 
+
+>resilience4j-spring-boot2
+{
+
+    resilience4j.circuitbreaker:
+      configs:
+        default: # Default configuration applied to all circuit breakers unless overridden
+          registerHealthIndicator: true # Expose Circuit Breaker health status via Spring Boot Actuator
+          slidingWindowType: COUNT_BASED # How to measure the failure rate: COUNT_BASED or TIME_BASED
+                                          # COUNT_BASED: Uses a fixed number of last calls
+                                          # TIME_BASED: Uses calls within a sliding time window
+          slidingWindowSize: 10 # Number of calls (for COUNT_BASED) or time window duration in seconds (for TIME_BASED)
+                                # This determines the size of the window used to calculate the failure rate
+          minimumNumberOfCalls: 5 # Minimum number of calls needed in the sliding window to evaluate the failure rate
+                                  # The circuit breaker will not transition from CLOSED to OPEN until this many calls have been made
+          failureRateThreshold: 50 # Percentage threshold (0-100) for the failure rate that triggers the transition to OPEN
+                                   # If failure rate in the sliding window >= this, trip the circuit
+          waitDurationInOpenState: 60s # Duration (e.g., 60s, 1m) the circuit breaker stays in the OPEN state before transitioning to HALF_OPEN
+                                       # Calls during this period are fast-failed
+          permittedNumberOfCallsInHalfOpenState: 3 # Number of calls allowed in the HALF_OPEN state to test if the service has recovered
+                                                   # After this many calls, the circuit transitions based on their success/failure
+          automaticTransitionFromOpenToHalfOpenEnabled: true # Whether to automatically transition from OPEN to HALF_OPEN after waitDurationInOpenState expires
+                                                            # If false, the first call after the waitDuration triggers the transition
+          recordExceptions: # List of exceptions that should be considered failures and increase the failure rate
+            - java.lang.RuntimeException
+            - java.util.concurrent.TimeoutException # Often useful if your API client throws this on timeout
+          ignoreExceptions: # List of exceptions that should be ignored and not count towards the failure rate
+            - java.lang.IllegalArgumentException # Example: A client-side validation error shouldn't trip the breaker
+          eventConsumerBufferSize: 100 # Size of the buffer to store circuit breaker events (optional but good for monitoring)
+    
+      instances:
+        myExternalService: # Specific configuration for a circuit breaker named 'myExternalService'
+          baseConfig: default # Inherit properties from the 'default' config first
+          slidingWindowSize: 20 # Override default: Use a larger window size for this specific service
+          failureRateThreshold: 60 # Override default: Allow a slightly higher failure rate before tripping
+          waitDurationInOpenState: 30s # Override default: Stay open for a shorter period
+
+
+}
+
+@Service
+ @CircuitBreaker(name = "myCircuitBreaker"   name you have given in prop , fallbackMethod = "fallbackResponse")
+
+public String fallbackResponse(Throwable t)
+
+dont wrap your method in try catch 
+
+
 3.6 auto scailing and monitoring 
 3.7 load balancing 
 

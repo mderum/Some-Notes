@@ -402,5 +402,7 @@ dont wrap your method in try catch
 3.7 load balancing 
 
 
+DB policy check
+Consider we have different sources in a payload ( type a and b more can come in future) how to handle the code in Java+ spring to run or check policies in db
 
 

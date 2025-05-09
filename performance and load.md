@@ -127,7 +127,10 @@ Left -> relation is optional
  
 DB connection or thread pool exhaustion
  
-3.1 Database Connection Pooling
+3.1 Database Connection Pooling  
+
+?why should i do pooling ?  making a connection is costly( network latency , auths etc). Resusing same can reduce latency, this is not observable or measurable in low end system, but when the 
+concurrency increases, a significant lag can be seen. Avoid overload on DB, dont give it so much that it couldnt handle.
 
 Hikari CP
 {

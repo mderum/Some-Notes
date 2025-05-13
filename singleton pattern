@@ -52,5 +52,54 @@ public class SGT implements Serializable {
 
 ***driver class***
 
+package ston;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.lang.reflect.Constructor;
+
+public class driver {
+
+	public static void main(String[] args) throws Exception {
+
+		SGT instanceOne = SGT.getInstance();
+		System.out.println(instanceOne.hashCode());
+
+		SGT instanceTwo = SGT.getInstance();
+		System.out.println(instanceTwo.hashCode());
+
+		// reflections
+		Constructor<SGT> declaredConstructor = SGT.class.getDeclaredConstructor();
+
+//		  declaredConstructor.newInstance();   illegal access EX 
+
+		declaredConstructor.setAccessible(true);
+
+		// pattern broke new instance created P1
+		SGT instanceThree = declaredConstructor.newInstance();
+		System.out.println(instanceThree.hashCode());
+
+		try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream("SGT"))) {
+
+			os.writeObject(instanceTwo);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		try (ObjectInputStream io = new ObjectInputStream(new FileInputStream("SGT"))) {
+
+			// pattern broke new instance with different hashcode P2
+			SGT readInst = (SGT) io.readObject();
+			System.out.println(readInst.hashCode());
+
+		}
+
+		// for P1 add null check in your constructor
+	}
+}
 
 

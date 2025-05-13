@@ -1,0 +1,56 @@
+package ston;
+
+import java.io.Serializable;
+
+public class SGT implements Serializable {
+
+	// can be volatile for making it thread safe and
+	private static SGT instance;
+
+	// so that driver class cant not call new SGT for getting a instance
+	private SGT() throws Exception {
+
+		/*
+		 * add this for P1 if(instance !=null ) { throw new
+		 * Exception("instance is already present"); }
+		 */
+	}
+
+	// check if instance is already there return same
+	public static final SGT getInstance() throws Exception {
+
+		// for thread safety sync this method
+		// can add double check null for instance or use a holder class . lazy loading
+		// no sync needed
+		if (instance == null) {
+			instance = new SGT();
+		}
+
+		return instance;
+
+	}
+
+	/* For P2 add this */
+	private Object readResolve() {
+
+		return instance;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+---
+
+
+
+***driver class***
+
+
+

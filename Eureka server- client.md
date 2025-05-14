@@ -1,14 +1,16 @@
 ***DEP***
 
 {
-      
+
+            #needed for both
          <properties>
       		<spring-cloud.version>2023.0.5</spring-cloud.version>
       	</properties>
 
- 
-      <dependency>
-      			<groupId>org.springframework.cloud</groupId>
+
+                   #needed for server only 
+                  <dependency>  
+      			<groupId>org.springframework.cloud</groupId>  
       			<artifactId>spring-cloud-starter</artifactId>  It sets up a base foundation, for other cloud features , provides contezt , a meta starter
       		</dependency>
       		<dependency>
@@ -16,6 +18,25 @@
       			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>  eureka server implementation
       		</dependency>
 
+                   #needed for client only 
+                  <dependency> 
+                  			<groupId>org.springframework.cloud</groupId>
+                  			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+                  		</dependency>
+
+
+                   #needed for both
+                    	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
   }
 
 
@@ -45,7 +66,8 @@
   {
       
     @SpringBootApplication
-    @EnableEurekaServer  // for spring V 3X use @EnableDiscoveryClient
+    @EnableEurekaServer  
+    @EnableDiscoveryClient   // for spring V 3X use @EnableDiscoveryClient
     public class ServiceRegistryApplication {
   
   }

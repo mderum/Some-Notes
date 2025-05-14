@@ -9,11 +9,11 @@
  
       <dependency>
       			<groupId>org.springframework.cloud</groupId>
-      			<artifactId>spring-cloud-starter</artifactId>
+      			<artifactId>spring-cloud-starter</artifactId>  It sets up a base foundation, for other cloud features , provides contezt , a meta starter
       		</dependency>
       		<dependency>
       			<groupId>org.springframework.cloud</groupId>
-      			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+      			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>  eureka server implementation
       		</dependency>
 
   }
@@ -45,7 +45,7 @@
   {
       
     @SpringBootApplication
-    @EnableEurekaServer
+    @EnableEurekaServer  // for spring V 3X use @EnableDiscoveryClient
     public class ServiceRegistryApplication {
   
   }

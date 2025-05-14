@@ -54,7 +54,19 @@
       #not a client no need to fetch registry 
       eureka.client.fetch-registry=false
       server.port=8761
-  
+
+
+	#service
+  	spring.application.name=UserService
+	server.port=8080
+ 	#register using ip address not hostmane
+	eureka.instance.prefer-ip-address=true
+ 	#fetch registry periodically 
+	eureka.client.fetch-registry=true
+ 	#register self with the eureka server
+	eureka.client.register-with-eureka=true
+ 	# location of server
+	eureka.client.service-url.defaultZone=http://localhost:8761/eureka
   }
 
 

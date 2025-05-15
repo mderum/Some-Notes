@@ -1,5 +1,6 @@
 Dep 
 
+		//remember reactive works with reactive gateway only ,  reactive and web mvc wont work
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
@@ -8,14 +9,15 @@ Dep
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-gateway-mvc</artifactId>
-		</dependency>
+		  <dependency>
+		      <groupId>org.springframework.cloud</groupId>
+		      <artifactId>spring-cloud-starter-gateway</artifactId>
+		    </dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
+
 
 
 

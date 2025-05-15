@@ -1,0 +1,76 @@
+
+public class CAr {
+
+	
+	private String type;
+	private String name; 
+	private String model;
+	
+	
+	// private constructors can be accessed by inner class
+	private CAr(Maker maker) {
+		this.type=maker.type;
+		this.name=maker.name;
+		this.model=maker.model;
+	}
+	
+	
+	
+	
+	public static class Maker{
+		private String type;
+		private String name; 
+		private String model;
+		
+		
+		public Maker setType(String type) {
+			this.type=type;
+			return this;
+			
+		}
+		public Maker setName(String type) {
+			this.name=type;
+			return this;
+			
+		}		public Maker setModel(String type) {
+			this.model=type;
+			return this;
+			
+		}	
+		
+		// when you call make() it will init new CAr with its fields and return 
+		public CAr make() {
+			
+			// can add validations here for mandatory fields 
+			return new CAr(this);  // constructor made in start, private so only maker or builder can access it. 
+		}
+		
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "CAr{ name-"+this.name+" type-"+this.type+" model-"+this.model+"}";  
+	}
+}
+
+
+
+
+---
+
+System.out.println( new CAr.Maker().setModel("1995").setName("FORD MUSTAND GT").setModel("21 590").make());
+
+
+
+
+
+
+
+
+
+
+
+
+
+

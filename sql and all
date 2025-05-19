@@ -1,6 +1,0 @@
-table creation 
-CREATE TABLE Students (
-    id INT PRIMARY KEY,  #mark primary key
-    name VARCHAR(50),
-    age INT
-);

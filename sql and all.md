@@ -35,11 +35,3 @@ insert into crypto(name,price) values ('ETH',6530.33);  // insert values
 
 
 
-char vs varchar 
-
-    >char is for fixed length , var for variable length data
-    > frequent updates on varchar may give overhead on performance , framgmentation problem  ( limit max size , appropriate data  type for large text , ROW_FORMAT= DYNAMIC, COMPRESSED,
-    >separate large data getting frequent updates in new table , OPTIMIZE TABLE XYZ;)
-
-
-

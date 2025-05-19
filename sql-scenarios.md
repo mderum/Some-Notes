@@ -35,15 +35,21 @@ char vs varchar
 
 primary key ? why needed what is not present 
 
->identifies rows uniquely , used in joins , when by DB in backend as clustered index
-
-> if not present > it will looks for unique NOT NULL key and use it in clustered index,  if not present it will create a 6 byte hidden key for internal purpose
-      > not having a primary can be performace implications while quering
+      >identifies rows uniquely , used in joins , when by DB in backend as clustered index
+      
+      > if not present > it will looks for unique NOT NULL key and use it in clustered index,  if not present it will create a 6 byte hidden key for internal purpose
+            > not having a primary can be performace implications while quering
 
 
 -----
 
+truncate vs delete -> 
 
+      dealloactes pages |  fires delete triggers 
+      resets the counters| this does not 
+      cannot use where | can use where 
+      faster | nope 
+      no rollbacks | can be used in txnal scope for rollback
 
 
 

@@ -18,11 +18,19 @@ table creation
 
 
 
+Foreign key 
+
+    ALTER TABLE incubator
+    ADD CONSTRAINT fk_crypto_id  # name of constraint 
+    FOREIGN KEY (crypto_id)  # child  a column in your child table 
+    REFERENCES crypto(id)  # referenced table is parent table
+    ON DELETE CASCADE;
 
 
+desc table # how table schema 
 
-
-      
+alter table incubator add column crypto_id  bigint;
+ 
 
 show tables; // display all tables for a selected DB 
 

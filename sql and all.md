@@ -18,12 +18,7 @@ table creation
 
 
 
-truncate vs delete -> 
 
-      dealloactes pages |  fires delete triggers 
-      resets the counters| this does not 
-      cannot use where | can use where 
-      faster | nope 
 
 
 

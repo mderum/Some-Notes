@@ -1,0 +1,40 @@
+? container orchestrator tool 
+
+Cluster { [ master node or control plane ] 
+          [ worker node [  kubelet , kubeproxy , runtime  ],  [ pods [ container 1 , container 2 ]] ]  
+        }
+
+K8s features -> self healing , auto rollbacks , H scaling , portable with different clouds
+OVerkills -> Cost for basic fx running , complex 
+
+
+basic structure 
+control plane
+    Api server -> interface between control plane and rest of the clusters
+    etcd -> distributed key value store | store retrieve info about the cluster 
+    scheduler -> scheduling task or pods in worker nodes    
+    controller manager -> manages the container state 
+
+      
+     worker Nodes 
+
+          Kubelet -> recevies info from control plane to maintain state of pods  
+          container runtime -> runs , pull image , start ,stop , manage resource 
+          kube proxy ->  net proxy , routes , LB
+
+          Pods (smallest unit managed, shared exec env for containers)  ( container 1 , container 2 .. )
+
+
+Namespace -> logical labelling 
+
+service -> abstraction layer for sets of pods it offers LB 
+
+Replica set ->  replicate same service for availablity| LB 
+
+config map -> stores non conf data 
+
+ingress -> external https access to service    ingress{  service 1 , service 2  }
+
+secrets -> stores sensitive data  inside etcd
+kubectl create secret generic db-secret --from-literal=username=admin --from-literal=password=password
+

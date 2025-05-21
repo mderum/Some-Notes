@@ -12,14 +12,14 @@ basic structure
 control plane
     Api server -> interface between control plane and rest of the clusters
     etcd -> distributed key value store | store retrieve info about the cluster 
-    scheduler -> scheduling task or pods in worker nodes    
-    controller manager -> manages the container state 
+    scheduler ->assign pods  based on resouces available
+    controller manager -> manages the cluster  state 
 
       
      worker Nodes 
 
-          Kubelet -> recevies info from control plane to maintain state of pods  
-          container runtime -> runs , pull image , start ,stop , manage resource 
+          Kubelet -> recevies info from control plane to maintain state of pods  , report status to master , lifecycle of pod
+          container runtime -> runs , pull image , start ,stop , manage resource   like docker
           kube proxy ->  net proxy , routes , LB
 
           Pods (smallest unit managed, shared exec env for containers)  ( container 1 , container 2 .. )
@@ -38,3 +38,9 @@ ingress -> external https access to service    ingress{  service 1 , service 2  
 secrets -> stores sensitive data  inside etcd
 kubectl create secret generic db-secret --from-literal=username=admin --from-literal=password=password
 
+
+labels -> key value attached to objects for ID and grouping 
+annotations -> non id data , ex build info 
+
+
+HPA  -> h scaler on resouce custom config 

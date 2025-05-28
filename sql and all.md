@@ -231,4 +231,53 @@ and count(*)>3;
 
 
 
+----
+
+UPDATE table_a a
+JOIN table_b b ON a.join_column = b.join_column
+SET a.column_to_update = b.source_column
+WHERE a.some_condition
+
+--------------
+
+
+grant access 
+
+grant ALL PREVILEGES | insert | update etc  ON *.* | db.table | db.* | columns | ROUTINES for procs 
+TO  'erum'@'proddb'  'erum'@'%'
+WITH grant option -> i can grant access to others 
+
+
+REVOKE previl_TYPE on xyz table or db  from this user
+
+
+---------
+
+create user 'erum'@'hostname' identified by 'password'
+
+
+
+---------
+
+set  (GLOBAL IF NEEDED) transaction isolation level  READ UNCOMMITED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE
+
+
+---
+
+GRANT SELECT (col_A, col_B) ON database_name.sensitive_data TO 'user'@'host';
+
+
+----
+
+
+select balance from account where id='a' for update -> locks the row till txn processes 
+
+
+----
+
+savepoint  point1; 
+rollback to point1;
+
+
+----
 

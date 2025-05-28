@@ -51,5 +51,10 @@ truncate vs delete ->
       faster | nope 
       no rollbacks | can be used in txnal scope for rollback
 
+--------------
 
+
+order of clause processing 
+
+from | where > select > group by > having  > order by 
 

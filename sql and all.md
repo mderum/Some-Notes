@@ -222,3 +222,13 @@ select * from crypto limit 2,4;
 
 
 
+---
+
+select  customer_id from orders group by 
+customer_id having 
+min(YEAR(order_date))= 2023 
+and count(*)>3;
+
+
+
+

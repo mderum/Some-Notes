@@ -1,0 +1,17 @@
+Problem? 
+we have a ring like structure of Hashes( Servers)  and requests 0----->M-1 like a array 
+
+Servers S1,S2,S3,S4 -> we placed the server using HX1  hash FX  on the ring ,similarly used a hash FX for placing the requests
+
+now servers | request are evenly distributed ( taking certain probablities ) on the Ring.
+
+A  sever goes down? 
+A request may need to travel X number of steps or maybe  even half of the ring path to get executed. That's the problem 
+
+?solution 
+Use  K number of hashing FX for placing the servers ( virtual servers - same server at various place in ring with a different namespace ) 
+
+This increases the entropy of the server making the request to travel less in case we loose a server. 
+
+
+FX: function 

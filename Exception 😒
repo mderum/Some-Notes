@@ -1,0 +1,45 @@
+using Controller advice 
+
+1. create custom classed for you exception if needed . 
+
+EX:   class BlahBlahException extends RuntimeException {
+        //any filed vars if needed 
+        
+        BlahBlahException(String message) {
+          super(message);
+        }
+}
+
+2. implement handling machinism using ControllerAdvice annotation on a class with @ExceptionHandler(ExceptionClassName.class)
+
+@ControllerAdvice
+class BlahController{
+
+@ExceptionHandler(BlahBlahException.class)
+public ResponseEntity<?> handleBlahBlahException(BlahBlahException ex) {
+
+Map<String , Object> body = new HashMap<>();
+body.put("xyzField",ex.getMessage());
+
+return new ResponseEntity<>(body,HttpStatus.BAD_REQUEST);  
+}
+
+
+@ExceptionHandler(IllegalArgumentException.class)
+public ResponseEntity< Map<String,Object> >  handleIllegalArgException( IllegalArgumentException ex) {
+
+  return ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+
+  return ResponseEntity.status().build;
+  return ResponseEntity.badRequest().build;
+}
+
+
+
+
+
+
+
+
+}

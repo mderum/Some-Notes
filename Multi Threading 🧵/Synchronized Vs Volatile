@@ -1,0 +1,7 @@
+Synchronized VS vloatile 
+Method and code blocks  | variables
+accquired and release lock so deadlocks are there  | no locking so no deadlocks
+all changes in block are visible |  all thread see the latest value
+atomicity guarenteed for code inside |  no gurantee
+higher memory overhead as locking is there | lower overhead
+use for complex and multi Vars |  status and flags 

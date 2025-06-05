@@ -5,3 +5,22 @@ all changes in block are visible |  all thread see the latest value
 atomicity guarenteed for code inside |  no gurantee
 higher memory overhead as locking is there | lower overhead
 use for complex and multi Vars |  status and flags 
+
+
+while defining a singleton class  we are using volatile instance var because 
+instruction reordering can take place and 
+
+Allocate > call new () >  assign reference to instance
+
+  //without volatile 
+   synchronized(Singleton.class) {
+          //Thread 2  after T1 sees reference is not null and carries on with broken reference
+          if (instance == null) {
+              //thread 1 >  allocated > assigned to instance >> constructor still int T1
+              
+              instance = new Singleton(); // not atomic by itself
+          }
+      }
+
+
+so with both these visiblity and atomicity is guarenteed along with double checked locking

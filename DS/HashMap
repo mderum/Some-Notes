@@ -30,6 +30,24 @@ collision
 HashMap will append or update the given new value after comparing using equals() to the bucket
 
 
+for custom objects use of equals() and hashCode()
+is important for collision resolution 
+
+@Override
+public int hashCode(){
+return Objects.hash(id,name); or some other logic
+}
+
+@Override
+public boolean equals(Object o){
+
+  if this == o return true // reference compared 
+  if o == null || getClass() != o.getClass()  return false 
+
+  return  id==o.Id && Objects.equals(o.name,name);  //whatever logic needed
+}
+
+
 ----------------
 
 

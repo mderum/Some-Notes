@@ -1,0 +1,53 @@
+
+{  B1, B2 , B3 }
+
+B-> linkedList<T>  OR TreeMap<T>
+T-> key,value,hashcode,NextNode reference
+
+----------------------
+
+
+retrieval and storage of key-value pair 
+average access performance
+-----
+
+.put(Key,Value)
+how?  insert key,value ->  key.hash() -> 123090
+we have array of buckets (linked list or treeMap) with size M
+
+map the key in the bucket ?  but size is only M-1 
+
+To get a number in range of 0-M  use % MOD 
+123090 % M  -> return a index withtin range of 0-M-1
+
+put key,value in that node of bucket
+
+------
+
+collision 
+
+2 key hash gives same index 
+HashMap will append or update the given new value after comparing using equals() to the bucket
+
+
+----------------
+
+
+
+.get(Key) 
+Key -> hash()  -> get index >   goto that index in bucket -> traverse and use .equals(Key) to get the value else null 
+
+
+----
+
+Resizing 
+
+Load factor 0.75 
+
+when number of entries > capacity(ex 10 ) * LF  -> array size is doubled ->  reHash all entries > new distribution 
+
+
+---
+
+
+

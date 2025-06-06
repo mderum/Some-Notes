@@ -1,0 +1,50 @@
+
+Projection api -> 
+ return only specific fields without exposing all entity details in response 
+
+FLOW -> interface or DTO > repo with methods > call() 
+
+Interface based->
+  1:
+  public interface UserView{
+    Long getId();
+    String getName();
+  } 
+
+
+  2:
+  public UserRepo implements JpaRepository<User,Long> {
+      List<UserView> findById(Long id);
+  }
+-----------------
+
+
+
+DTO based
+
+UserViewDTO{
+private Long id;
+private String name;
+
+//cons 
+//gettters
+}
+
+  public UserRepo implements JpaRepository<User,Long> {
+      @Query(select new com.ex.UserViewDTO(u.id,u.name ) from User u)
+      List<UserViewDTO> findAllUsers();
+  }
+
+ @Query(select new com.ex.UserViewDTO(u.id,u.name ) from User u where u.cat= :category)
+      List<UserViewDTO> findAllUsers(@Param("category") String category);
+----------
+
+
+Dynamic or runtime resolution using single method 
+
+<T> List<T> findBy(Class<T> type); 
+
+findBy(UserView.class);
+findBy(UserDTO.class);
+
+

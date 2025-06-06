@@ -4,7 +4,7 @@ Projection api ->
 
 FLOW -> interface or DTO > repo with methods > call() 
 
-Interface based->
+Interface based->  few fields , readonly
   1:
   public interface UserView{
     Long getId();
@@ -20,7 +20,7 @@ Interface based->
 
 
 
-DTO based
+DTO based  ->>  cusomt logic , modification , business logics 
 
 UserViewDTO{
 private Long id;
@@ -40,7 +40,7 @@ private String name;
 ----------
 
 
-Dynamic or runtime resolution using single method 
+Dynamic or runtime resolution using single method   -> different views for different users 
 
 <T> List<T> findBy(Class<T> type); 
 

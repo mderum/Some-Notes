@@ -14,3 +14,14 @@ DI / IOC -> allows to receive deps from external sources rather than creating th
 Builder patterns -> for comfiguring complex object and many params object like java ,  HttpHeader builder, mock mvc, UriPathBuilder , spring security chain
 Proxy -> in AOP , in logging txn mngmt , @Transactional -> wraps the logic in , Lazy loading -> creates a proxy and when object is really needed object is created and returned.
 
+
+Microservices: 
+Circuit Breaker
+Retry 
+Timeout
+SD 
+Rate Limiting
+Event Sourcing 
+Saga 
+ChoreoG
+Orch

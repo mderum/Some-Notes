@@ -1,10 +1,25 @@
 Java 
 
-Singletone -> Only one instance, can be used for logging and configuration
+Singleton -> Only one instance, can be used for logging and configuration
+prototype -> creates new object by copying existing , when new ()  is expensive Ops
 Factory Method -> provides a interface for object creation , subclasses after implementing can alter the type 
 Builder Patter ->  Construct objects steps by step , usefull for object with many optional params 
-prototype -> creates new object by copying existing , when new ()  is expensive Ops
 Adapter -> incompatible interfaces to work together 
+
+Bean Scopes in Java: 
+
+Singleton -> shared resources like service , dao layer , stateless , global use once loaded , spring context
+
+prototype -> non thread safe resource , stateful , form data etc , temp data , different data each time  , spring context
+
+Request -> single HTTP request flow , upload , validations , web context
+
+Session -> valid for a session of multiple requests , cart , authentication ,web context
+
+WebSocket -> real time data , charts , stocks
+
+Application -> application wide like configs , servletContext , static data that doesnt often change
+
 
 
 Spring Boot: 
@@ -28,16 +43,4 @@ Orch
 
 
 
-Bean Scopes in Java: 
 
-Singleton -> shared resources like service , dao layer , stateless , global use once loaded , spring context
-
-prototype -> non thread safe resource , stateful , form data etc , temp data , different data each time  , spring context
-
-Request -> single HTTP request flow , upload , validations , web context
-
-Session -> valid for a session of multiple requests , cart , authentication ,web context
-
-WebSocket -> real time data , charts , stocks
-
-Application -> application wide like configs , servletContext , static data that doesnt often change

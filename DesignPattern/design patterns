@@ -36,11 +36,19 @@ Retry
 Timeout
 SD 
 Rate Limiting
-Event Sourcing 
-Saga 
-ChoreoG
-Orch
+Event Sourcing -> save each state in DB ( insert time , update time , delete time ) with queues like kafka to communicate 
 
+Event Driving ->  do task with message events rather than making api calls or updating the DB. communcation occurs via events and roles are segregated.
+
+Saga 
+ChoreoG -> 2 services A and B -> A produces event on topicA -> B ccosumes it makes changes then produces event on topicB -> A consumes it and completes the flow
+Orch  -> central management authority to manage the flow, rollbacks or compensation.
+
+CQRS -> command query Responsiblity segregation
+
+Aggregator -> multiple api calls called in sequence ( increased network overhead ) , complex UI (needs to be aware of the context)
+      -> 1 call fails whole page stops , page breaks 
+      ->what to do > replace with a aggregator -> UI simplified , DTO simplified , better fallback , security 
 
 
 

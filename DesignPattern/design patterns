@@ -51,4 +51,12 @@ Aggregator -> multiple api calls called in sequence ( increased network overhead
       ->what to do > replace with a aggregator -> UI simplified , DTO simplified , better fallback , security 
 
 
+-----------
 
+software design pattern 
+
+creational  -> making  objection creation flexible -> singleton, factory, abstract , prototype , builder 
+
+structural   (relation between them -> adaptor ,proxy , bridge 
+
+behavioral  (communication between them -> template , observer ,state , command ,strategy  

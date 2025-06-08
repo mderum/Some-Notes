@@ -1,7 +1,0 @@
-VM
-login to instance 
-use putty gen to generate new pub and priv key 
-vm->edit > ssh >add pub key with username ( whoiam -> to get username ) 
-
-get external ip | port 22 | username > add in site settings in winScp 
-> advanced >ssh > import prv key.ppk > connect 

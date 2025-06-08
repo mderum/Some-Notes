@@ -23,11 +23,25 @@ Application -> application wide like configs , servletContext , static data that
 
 
 Spring Boot: 
+
+MVC , Repository
+
+Creational 
+Builder patterns -> for configuring complex object and many params object like java ,  HttpHeader builder, mock mvc, UriPathBuilder , spring security chain
 Singleton -> each bean is created once and reused by default
 Factory method -> uses FactoryBean interace to create , FactoryBean<ClassType> , getObject() , @Bean , ApplocationContext.getBean()
 DI / IOC -> allows to receive deps from external sources rather than creating themselves
-Builder patterns -> for comfiguring complex object and many params object like java ,  HttpHeader builder, mock mvc, UriPathBuilder , spring security chain
-Proxy -> in AOP , in logging txn mngmt , @Transactional -> wraps the logic in , Lazy loading -> creates a proxy and when object is really needed object is created and returned.
+
+Structural pattern 
+Proxy ->creates a proxy and when object is really needed object is created and returned.  in AOP , in logging txn mngmt , @Transactional -> wraps the logic in , Lazy loading -> 
+Facade -> simplyfy the abstraction , like service | dao 
+Adapter 
+
+Behaviour patterns 
+Chain of responsiblity 
+Commands -> like scheduler , runnable
+Observer -> @eventListener , notifier
+Template -> jdbc  Rest
 
 
 Microservices: 

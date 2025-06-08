@@ -1,0 +1,29 @@
+Stack 
+primitive data , reference to obj on Heap , method memory blocks for each method , temp vars 
+can have multiple stacks in a application -> each thread has its own  stack 
+
+
+{
+As the scope or block ends and work is done , Scopes will be popped
+
+} //block ends
+
+---------
+
+
+Heap  ( string pool is also here ) 
+stores obj 
+
+------
+
+
+
+GC 
+checks if a obj is reference on stack > no > eligible for GC
+
+Strong ref -> new User(); 
+
+Weak ref ->  new WeakReference<User> ( new User ( x ,y ) ) ;  -> as soon as gc runs > removed
+
+soft ref -> only remove if very urgent or inder memory pressure 
+

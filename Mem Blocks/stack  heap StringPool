@@ -27,3 +27,16 @@ Weak ref ->  new WeakReference<User> ( new User ( x ,y ) ) ;  -> as soon as gc r
 
 soft ref -> only remove if very urgent or inder memory pressure 
 
+Change ref >  set to null , or point to something else
+
+
+Parts of heap
+> young gen  > less age > low freq uses 
+> old gen > above thres age , more often used object
+> metaspace > classes are loaded here when needed ( constants, static etc, defination ) 
+
+Versions 
+Serial  1 thread
+parallel mX thread , low pause 
+Concurrent Mark Sweep -> low pause time , works with application threads , no compaction
+G1  -> better than above + compaction

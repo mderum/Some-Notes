@@ -1,0 +1,22 @@
+monitor and manage your application using various endpoints 
+
+     <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+
+management.endpoints.web.exposure.include=*  //exposes all endpoints 
+management.endpoints.web.exposure.include=health,info,metrics,loggers   // for specific use comma seperated 
+
+Health Checks /health
+
+Metrics  /metrics    /metrics/metricName 
+
+Env /env configs , system settings 
+
+beans /beans 
+
+/mappings 
+
+/loggers -> view and change logging level at runtime 
+

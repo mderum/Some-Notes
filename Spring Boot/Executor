@@ -1,0 +1,31 @@
+a framework in java.util.concurrent  provides a way for manage threads 
+
+
+ExecutorSErvice is a sub interface  provides highlevel api for managing , executing , handling results using Future and callable , lifecycle mgmnt 
+
+ExecutorService exu = Executors.newFixedThreadPool(2);
+exu.execute( ()-> sysout("task done" ) ); 
+exu.shutdown();
+
+
+Runnable -> no return 
+Callable -> returns , or exception 
+Future<> hold results , async 
+
+Callable<String> task = ()->{ Thread.sleep(10)  return "task1" };
+
+Future<String>  futureResult = exu.submit(task);
+
+futureResult.get() // blocks if still processing 
+
+.get(2,TimeUnit.Seconds); returns or timeout exception
+
+isDone() // True False 
+isCancelled() // True False 
+.cancel(True) // cancel if running 
+
+
+.invokeAll(List<Callable<String>> taskList ) // invoke all  returns List< Future<String> > results -> ForEach > .get();
+
+.invokeAny(tasks)  // return the first completed > "task1" 
+

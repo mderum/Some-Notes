@@ -65,3 +65,38 @@ private JdbcTemplate jtemp;
 
 
 
+
+----------------------
+with jpa 
+
+@EnableJpaRepository(
+basePackage="com.x.y , 
+entityManagerFactoryRef="primaryEntityManagerFactory",
+transactionManagerRef=""
+)
+@Configuration
+@EnableTransactionManagement
+sourceAConfig{
+
+@Bean
+@configurationProperties(prefix 
+getSourceADSP()
+
+
+getSourceADS()
+
+
+@Bean  //methods name == bean name in qualifier 
+LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory( EMFBuildeer ) 
+
+
+@Bean 
+PlatformTxnManager (primaryEntityManagerFactory)  return jpatxnmanager(PEMF)
+
+
+
+}
+
+
+use @Transactional("primaryEntityManager")
+

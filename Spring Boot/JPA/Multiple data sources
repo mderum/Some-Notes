@@ -51,7 +51,7 @@ summary:
 
 Create a 
 
-DataSourceProperties with @bean("name")  and @ConfigurationProperties(prefix="2xpath")  return  new () 
+DataSourceProperties with @bean("name")  and @ConfigurationProperties(prefix="2xpath")  return  new ()   //can be skipped to 2nd step directly 
 
 now create a DataSource with @Bean("name") use @Qualifier for correct DSP  return dsp.initilizeDataSourceBuilder().type(HikariDataSource.class).build(); 
 
@@ -61,3 +61,7 @@ now create a jdbcTemplate use @Bean("name)  use @Qualifier for correct DS return
 @Qualifier("jdbcTemplate")
 @Autowired
 private JdbcTemplate jtemp;
+
+
+
+

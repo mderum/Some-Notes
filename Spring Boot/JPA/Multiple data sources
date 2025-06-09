@@ -1,0 +1,63 @@
+spring.dataSource.url=jdbc:mysql://xxx.xxx.xxx.xx:3306/dbName
+spring.dataSource.username=user
+spring.dataSource.password=pass
+spring.dataSource.driverClassName=com.mysql.cj.jdbc.Driver
+
+
+source2.dataSource.url=...
+
+..
+..
+
+@Configuration 
+class DataConfig{ 
+
+  @Bean(name="sourceA")
+  @ConfigurationProperties(prefix="spring.dataSource")
+  DataSourceProperties getSourceAProps(){  return new DataSourceProperties(); }
+
+  @Bean(name="SourceB" ) 
+  @ConfigurationProperties( prefix="source2.dataSource" ) 
+   return new DataSourceProperties(); 
+
+
+@Bean("dsA")
+DataSource getSourceADataSource( @Qualifier("sourceA")  DataSourceProperties dsp  //how to get a particular bean here a 2 are present use @Qualifier ) {
+return  dsp.initializeDataSourceBuilder().type(HikariDataSource.class) .build()
+
+}
+
+
+
+@Bean("dsB")
+DataSource getSourceBDataSource( @Qualifier("sourceB")  DataSourceProperties dsp  //how to get a particular bean here a 2 are present use @Qualifier ) {
+return  dsp.initializeDataSourceBuilder().type(HikariDataSource.class) .build()
+
+}
+
+
+
+jdbc template 
+
+@Bean("jdbcTemplate")
+JdbcTemplate getSourceAJdbcTemplate(  @qualifier("dsA") DataSource ds ) {
+
+return new JdbcTemplate(ds);
+}
+
+
+
+summary: 
+
+Create a 
+
+DataSourceProperties with @bean("name")  and @ConfigurationProperties(prefix="2xpath")  return  new () 
+
+now create a DataSource with @Bean("name") use @Qualifier for correct DSP  return dsp.initilizeDataSourceBuilder().type(HikariDataSource.class).build(); 
+
+now create a jdbcTemplate use @Bean("name)  use @Qualifier for correct DS return new jdbcTemplate(ds); 
+
+
+@Qualifier("jdbcTemplate")
+@Autowired
+private JdbcTemplate jtemp;

@@ -100,3 +100,26 @@ PlatformTxnManager (primaryEntityManagerFactory)  return jpatxnmanager(PEMF)
 
 use @Transactional("primaryEntityManager")
 
+
+
+----------------------
+Load data on startup 
+
+
+auto loads schema.sql and data.sql 
+
+for multiple schemas and data 
+
+
+getSourceADS() 
+
+sourceADataSourceInitializer( @Qualifier("sourceADS")  DataSource) 
+{
+  ResourceDataBasePopulator rDBp = new 
+rDBp.addScript(  new Class Path Resource )
+
+DSI = new DSI 
+dsi.setDS  .setDP
+return 
+
+}

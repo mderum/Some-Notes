@@ -1,0 +1,5 @@
+grant permission 
+GRANT ALL PRIVILEGES ON TABLE shares TO admin;
+
+create new user 
+CREATE ROLE admin WITH LOGIN PASSWORD 'pass';

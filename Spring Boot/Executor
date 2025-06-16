@@ -44,3 +44,5 @@ TaskExecutor ->  ThreadPoolTaskExecutor .maxPool .queueCapacity . core   -> init
 
 CompletableFuture  > Non blocking Async 
 
+CompletableFuture<String> cf =  CompletableFuture.supplyAysc(  ()-> {  somelogic..  return AnyReturnType; };
+

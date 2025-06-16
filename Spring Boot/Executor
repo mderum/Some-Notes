@@ -29,3 +29,18 @@ isCancelled() // True False
 
 .invokeAny(tasks)  // return the first completed > "task1" 
 
+
+-------------------
+spring managed Threadpool executors 
+
+create a config class with @EnableAsync add a bean in it 
+
+
+TaskExecutor ->  ThreadPoolTaskExecutor .maxPool .queueCapacity . core   -> init with core like 2 , 2 in use > rest all will be queued till 
+ Q size >  after that new will spawn till MAxPool Size.
+
+
+----
+
+CompletableFuture  > Non blocking Async 
+

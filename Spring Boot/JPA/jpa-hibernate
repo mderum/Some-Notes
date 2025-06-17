@@ -48,3 +48,17 @@ findBy(UserView.class);
 findBy(UserDTO.class);
 
 
+------
+combining 2 values from entity into one 
+  @Transient
+    private Integer totalVariable;
+
+
+  public Integer getTotalVar() {
+        int primary = fieldA != null ? fieldA : 0;
+        int secondary = fieldB != null ? fieldB : 0;
+        return primary + secondary;
+    }
+
+
+

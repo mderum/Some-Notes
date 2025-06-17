@@ -60,5 +60,57 @@ combining 2 values from entity into one
         return primary + secondary;
     }
 
+--
+
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "field in other table on which relation is needed to be setup  ", referencedColumnName = "current_TAble column")
+    private List<OtherEntity> otherEntity;
+
+
+   
+    @OneToOne(fetch = FetchType.EAGER)
+    @JsonManagedReference
+    @JoinColumn(name = "link", referencedColumnName = "inId",   insertable = false, updatable = false  // use these if you have the same coulmn in your current 
+entity already )
+    private LinkedTable linkedTable;
+
+@Column(name="something" , columnDefinition = "uuid" ) 
+
+
+
+---
+
+matching or filtering data from table 
+
+Specification<Your Entity Type >  search ( String or some input ) { 
+
+return  ( root , query , builder ) -> {
+
+Prediacte p = builder.or(
+builder.like( builder.lower(root.get("emailAddress")  )  , "%" + input.toLowerCase() + "%" ) ,
+builder.like( builder.lower(root.get("nameLast")  )  , "%" + input.toLowerCase() + "%" ) 
+);
+
+
+return p;
+
+}; 
+
+
+----
+
+use this specification in findAll (  spec , Pagable if needed ) ;
+
+
+* put JPASEPCIFICATIONEXECUTOR < Entity>  if any issues
+
+------
+
+
+Pagable.of( page to skip , size of list to retur ) 
+FindAll(pagable object just made )   > return Page<EntityObject> ;
+
+
 
 

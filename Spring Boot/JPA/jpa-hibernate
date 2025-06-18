@@ -49,31 +49,38 @@ findBy(UserDTO.class);
 
 
 ------
-combining 2 values from entity into one 
+combining 2 values from two fields  into one  in a given entity 
   @Transient
-    private Integer totalVariable;
+    private Integer totalVar;
 
 
-  public Integer getTotalVar() {
+  public Integer getTotalVar() {  // overloading the getting
         int primary = fieldA != null ? fieldA : 0;
         int secondary = fieldB != null ? fieldB : 0;
         return primary + secondary;
     }
 
---
+------------
 
+	name column will be of the object or entity mapping is added 
+	reference column will be of current entity 
+	if the coulmn of the key being used is already present in same table use insertable and updateble as false 
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "field in other table on which relation is needed to be setup  ", referencedColumnName = "current_TAble column")
-    private List<OtherEntity> otherEntity;
-
-
-   
     @OneToOne(fetch = FetchType.EAGER)
     @JsonManagedReference
-    @JoinColumn(name = "link", referencedColumnName = "inId",   insertable = false, updatable = false  // use these if you have the same coulmn in your current 
-entity already )
-    private LinkedTable linkedTable;
+    @JoinColumn(name = "linked-user", referencedColumnName = "investor-id", insertable = false, updatable = false)
+    private LinkedInvestor linkedInvestor;
+    
+    @OneToOne(mappedBy = "linkedInvestor", fetch = FetchType.LAZY)  // bi directional mapping  name of field in the annotated entity 
+    private Investor childInvestor;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "investor-id", referencedColumnName = "id")
+    private List<Investment> investments;
+    
+    @OneToMany
+    @JoinColumn(name = "owner-id", referencedColumnName = "investor-id", insertable = false, updatable = false)
+    private List<Transaction> transactions;
 
 @Column(name="something" , columnDefinition = "uuid" ) 
 
@@ -103,7 +110,9 @@ filtering at level 2 of nested entities
 			Join<Object, Object> bJoin = root.join("transactions  //this is the name of field in level 1 entity  ", JoinType.LEFT //type of join);
 
 	                builder.like(builder.concat(bJoin.get("transactionStatus"  //field in your java entity// ).as(String.class), ""), "%" + txnStatus+ "%")
-
+			// type of input or filterValue can create conflict 
+			//to convert to string use builder.concat
+								bjoin.get  .as(String.class)
 
 ----
 

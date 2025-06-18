@@ -98,6 +98,13 @@ return p;
 }; 
 
 
+filtering at level 2 of nested entities 
+
+			Join<Object, Object> bJoin = root.join("transactions  //this is the name of field in level 1 entity  ", JoinType.LEFT //type of join);
+
+	                builder.like(builder.concat(bJoin.get("transactionStatus"  //field in your java entity// ).as(String.class), ""), "%" + txnStatus+ "%")
+
+
 ----
 
 use this specification in findAll (  spec , Pagable if needed ) ;
@@ -110,6 +117,9 @@ use this specification in findAll (  spec , Pagable if needed ) ;
 
 Pagable.of( page to skip , size of list to retur ) 
 FindAll(pagable object just made )   > return Page<EntityObject> ;
+
+
+---
 
 
 

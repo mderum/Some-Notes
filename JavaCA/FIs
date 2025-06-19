@@ -1,0 +1,20 @@
+Consumer<String> strConsumer = x-> Sysout(x); 
+a void function takes inputs and returns nothing 
+
+//Chaining consumer 
+
+strConsumer.andThen( x ->  x+"!" ).
+                                  accept("input") -> will run each consumer one by one producing result.
+
+
+--------------
+Function <T , R >  takes input t and return R
+BiFunction<I,I,O > 
+
+Function<String,String>  func = x -> x +"!";
+
+//chaining 
+func.andThen(x-> x+"$"; ).apply("input"); 
+
+
+

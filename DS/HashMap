@@ -65,7 +65,14 @@ Load factor 0.75
 when number of entries > capacity(ex 10 ) * LF  -> array size is doubled ->  reHash all entries > new distribution 
 
 
+
 ---
+
+
+in case of a linkedHashMap 
+
+points to before and after insertion of this current node is maintained.
+
 
 
 

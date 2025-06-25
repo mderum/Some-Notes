@@ -4,6 +4,8 @@ Projection api ->
 
 FLOW -> interface or DTO > repo with methods > call() 
 
+*User findAllBy  ( By keyword is needed ) 
+
 Interface based->  few fields , readonly
   1:
   public interface UserView{
@@ -16,6 +18,8 @@ Interface based->  few fields , readonly
   public UserRepo implements JpaRepository<User,Long> {
       List<UserView> findById(Long id);
   }
+
+
 -----------------
 
 

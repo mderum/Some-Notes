@@ -135,5 +135,27 @@ FindAll(pagable object just made )   > return Page<EntityObject> ;
 ---
 
 
+@MappedSuperClass -> its property can be inherited by jpa entities but it is not a entity itself.
+we can put columns or  common fields here 
 
+
+----
+
+covert enum values to ordinals 
+
+put @Convert on your enum field 
+
+@Convert(converted= XYZENUMConverter.class)
+
+XYZENUMConverter extends BaseEnumConvereter<XYZENUM>{
+
+public XYZENUMConverter(){ super(XYZENUM.class); }
+
+}
+
+-----
+
+
+
+@column( name ="abc", columnDefination="text[]"  or "uuid"   or "int DEFAULT 0" )
 

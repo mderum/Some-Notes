@@ -159,3 +159,9 @@ public XYZENUMConverter(){ super(XYZENUM.class); }
 
 @column( name ="abc", columnDefination="text[]"  or "uuid"   or "int DEFAULT 0" )
 
+---
+
+
+---automatically handle creation and updation time 
+@creationTimeStamp @UpdateTimeStamp
+

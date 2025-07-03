@@ -116,7 +116,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 }
 
 > filter
-use date ranges , paginations , conditions, Stream , @Entity { @BatchSize(size = 10) }  ,split data process
+use date ranges , paginations , conditions, Stream , @Entity { @BatchSize(size = 10) }  Batching is used to load the same linked entity for a number of parent entities in single DB call helps reduce N number of calls example 3 user with orders it will say select * from order where user in 1 2 3  ,split data process
 
 >Proper joins
 Inner -> related entry must be present

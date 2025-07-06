@@ -15,9 +15,12 @@
 -- start by creating a interface for your service call 
   
   @FeignClient(name = "user-service" -> if you are using any SD user name of that service here direclty and spring will resolve the url
-          url="localhost:8080/" -> if not using SD put compelete location of service with port here ,along with with application context path 
-          configuration = MyCustomConfig.class  -> if using java based configs 
-          fallback= DinerFallback.class
+      url="localhost:8080/" -> if not using SD put compelete location of service with port here ,along with with application context path 
+      configuration = MyCustomConfig.class  -> if using java based configs 
+      
+  fallback= DinerFallback.class  -> for 4j and fallback configs 
+ )
+  
   P I DinerService{
     @GetMapping("getResturant/{id}")
     Resturant getResturantById( @PathVariable("id") String id );

@@ -43,21 +43,23 @@
 
 3. Configuration
 
-feign:
-    client:
-      config:
-       default:  -> here put deafult( for using global configs in all clients or give name of your client interface (name= "dinerService" to config that service only
-        connectTimeout:
-        readTimeout: 
-        loggerLevel: NONE BASIC HEADERS FULL  -> more config are needed for logging beside these 
+- feign:
+    - client:
+      - config:
+         - default:  -> here put deafult( for using global configs in all clients or give name of your client interface (name= "dinerService" to config that service only
+            - connectTimeout:
+            - readTimeout: 
+            - loggerLevel: NONE BASIC HEADERS FULL  -> more config are needed for logging beside these 
 
 
-logging:
-  level:
-    feign: DEBUG  -> general feign logging
-    feign.client: DEBUG  -> related to feign client req res
-    feign.Logger: DEBUG  -> some spring-cloud version logs through this, backward compatility
-    com.dinerService: DEBUG     -> logging related to your specific package
+- logging:
+ - level:
+    - feign: DEBUG  -> general feign logging
+    - feign.client: DEBUG  -> related to feign client req res
+    - feign.Logger: DEBUG  -> some spring-cloud version logs through this, backward compatility
+    - com.dinerService: DEBUG     -> logging related to your specific package
+  
+      
 - java classes can also be used for a more fine control over configs and returning Logger.Level and Request.Options from the config class using @beans
 
 

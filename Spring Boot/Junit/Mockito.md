@@ -45,8 +45,27 @@ Other Test classes
    
    --mockMvc.perform(  get( URL ).param( "key",value) .header( key,value )  ).
 
-   --after the above call it will return a status and response  .andExpect( status().isOk()/badRequest/gateway etc ) .addExpect( check here if data in resposne exist jsonPath( $.data).exist()  )
+   -- perform POST ->   .content( should use objectMapper.asValueAsString( DinerDto) )
 
+   --after the above call it will return a status and response  .andExpect( status().isOk()/badRequest/gateway etc )
+        .addExpect( check here if data in resposne exist jsonPath( $.data).exist()  )
+         Json path $. root folowed by properties like $.dinerName $.error.message  ).value(" e1" ) ->matches with this value 
+
+
+
+
+  --verify( mockedDinerSerive , time( number of times the is being called 1 or 2 or 3 etc ) ).getDinerDetails(requestData) 
+
+
+
+
+
+
+4. if not using mockito runner 5
+    put MockitoAnnotation.openMocks( this )   ->> init the mocks or injectmocks , use this in @BeforeEach
 
    
 
+
+5. Asserts
+-- assertThat( data ) .isNotNull()  .isEqualTo( value )

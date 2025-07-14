@@ -46,3 +46,16 @@ CompletableFuture  > Non blocking Async
 
 CompletableFuture<String> cf =  CompletableFuture.supplyAysc(  ()-> {  somelogic..  return AnyReturnType; };
 
+
+
+
+
+---
+
+dinerService().thenAcceptAysnc(  ) .
+exceptionally();
+
+
+ >> inside diner service module ->> Completable<Future> f = new (); 
+
+f.complete( var that neeeds to be sent in asyc )  and return the f in reponse from the methods module

@@ -69,3 +69,12 @@ Other Test classes
 
 5. Asserts
 -- assertThat( data ) .isNotNull()  .isEqualTo( value )
+
+
+----
+
+
+6. mocking application properties if not loading
+      Field feesField = BuyTransactionalService.class.getDeclaredField("dinerCharges");
+        feesField.setAccessible(true);
+        feesField.set(buyTransactionalService, 0.02);

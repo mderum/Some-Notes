@@ -20,5 +20,14 @@ spring:
     return http.build();
 
 
+3. create a @Bean of UserDetailsService() {  -> user will not automatically
+   logout once logged in , data needs to be deleted from session or through spring http request 
+
+    UserDetails = User.withUserName("kk").
+       password( passwordEncoder().encode("1234") )
+       .roles("USER").build();
+
+  return new InMemoryUserDetailsManager(kk,xyz);
+   }
 
    

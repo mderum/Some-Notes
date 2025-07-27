@@ -1,3 +1,37 @@
+
+Exception heirarchy: 
+
+
+        Throwable: -> a super class to all below provides utility methods for stack trace , message , cause 
+
+                Errors -> issues beyond program control like stack overflow, out of mem , no class def found , bootstrap method error 
+
+                Exceptions: 
+
+                        Checked:
+                
+                        IO Exception -> related to files , sockets , connections , host  , java.io
+                        Reflective Ops -> illegal Access, class not found, no such method or field  , java.reflect
+
+
+                        Unchecked: 
+                        Runtime -> array and string index out of bound , null pointer , unsupported op, class cast , java.lang
+        
+
+
+
+
+throw -> throw a exception or throwable object 
+throws -> used in method signature to declare that this method will throw exception
+
+
+finally -> exectues after try catch. 
+        -> cases when it will not execute->  System.exit(0) , errors like Out of Mem or stackOVerFlow , Thread.stop() force kill,
+
+
+
+
+
 using Controller advice 
 
 1. create custom classed for you exception if needed . 

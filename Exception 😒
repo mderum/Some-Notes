@@ -29,6 +29,25 @@ finally -> exectues after try catch.
         -> cases when it will not execute->  System.exit(0) , errors like Out of Mem or stackOVerFlow , Thread.stop() force kill,
 
 
+try with resource->  auto close the resources ( files, sockets , connections ) must be implementing AutoClosable interface
+                         no need to use finally for closing the resources, closed in reverse order 
+                                auto close can fail in Stream errors or connection errors or unchecked exceptions in close()
+
+
+
+Always catch child then parent exception , if not so compile time exeption will be there > unreachable code 
+
+
+Propagation -> if not cathing , throw it > propagates to top layer up the stack
+                , can hit main and print stack trace if not caught in middle and terminates program
+
+
+
+Exception chaining -> make a cons ( message , throwable ) -> so wrap your low level ex to your custom or high level ex preserving context.
+
+
+
+
 
 
 

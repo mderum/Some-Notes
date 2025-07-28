@@ -4,7 +4,8 @@ What are the performance implications, and how might MySQL handle this (especial
 
 old V >
 
-      entire table rewritten > read modify > write back > can cause locking 
+      entire table rewritten > recreate new strucutre >> read data by row >> modify and add default or null value for new column                                           > write back > can cause locking 
+      
       > solutions > add new will column with null > update with default in batches> finally alter column with deafult value
                   > use a thrird party tools > for creating shadow table and copying in chunks like percona toolkit
 

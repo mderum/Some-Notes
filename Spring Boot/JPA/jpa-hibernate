@@ -1,3 +1,26 @@
+spring data jpa 
+drivers for DB mysql or postgre
+
+application properties: 
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/hmvCorp
+    driver-class-name: org.postgresql.Driver
+    username: root
+    password: pass
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update  -> non destructive adds but never drops columns 
+			  :create --> create on each startup and stays on stop,
+			  :create-drop -> drops and create, also drop on stop
+			  :validate  -> compares if not matching throw error 
+    show-sql: true  -> will show sql being executed 
+
+
+
+
 
 Projection api -> 
  return only specific fields without exposing all entity details in response 

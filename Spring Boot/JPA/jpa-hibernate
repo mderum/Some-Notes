@@ -17,6 +17,12 @@ spring:
 			  :create-drop -> drops and create, also drop on stop
 			  :validate  -> compares if not matching throw error 
     show-sql: true  -> will show sql being executed 
+    defer-datasource-initialization: true  -> first run scripts then JPA/hibernate schema creation
+  sql:
+    init:
+      mode: always  -> force to run script 
+
+>> put script in src/main/resource/ data.sql 
 
 
 

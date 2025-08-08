@@ -1,18 +1,14 @@
 grant permission 
-GRANT ALL PRIVILEGES ON TABLE shares TO admin;
+GRANT ALL PRIVILEGES ON TABLE orders TO admin;
+CREATE EXTENSION IF NOT EXISTS "pgcrypto"; -> for generation fx 
+
+SELECT usename FROM pg_user;  -> get all users
+
 
 create new user 
 CREATE ROLE admin WITH LOGIN PASSWORD 'pass';
 
-
-
-select  inv."id"::text , inv."asset-id" ,
-STRING_AGG( shr."share-id"::text, ',') AS equities  
-from  public.investment inv  left join 
- public.shares shr 
-on inv."id" = shr."investment-id" group by inv."id"
-
-
+ 
 
 SELECT column_name, data_type
 FROM information_schema.columns
@@ -20,3 +16,8 @@ WHERE table_schema = 'public'
   AND table_name = 'xyz-table-name';
 
 
+
+Errors: 
+
+ERROR:  cached plan must not change result type
+SQL state: 0A000  -> create new plsql tool  window

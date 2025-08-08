@@ -25,9 +25,21 @@ spring:
 >> put script in src/main/resource/ data.sql 
 
 
+---------------------------
+
+@Transactional 
+public method
+creates a proxy of the bean (service class or any other where annotation is used
+ )  > method is called ( matches if @Transactional is present ) 
+> proxy checks metadata ( propagation , isolation etc) 
+> Proxy calls > Platform Txn Mngr > start a txn with non-auto commit mode before method execution 
+> Bind the connection (gets from pool )  to current thread via Txn Syncz Mngr
+> now method run in that txn under that same connection
+> success -> commit else rollback , only for unhecked exceptions 
+> unbind connection > reset auto -commit to original settings 
 
 
-
+------------
 Projection api -> 
  return only specific fields without exposing all entity details in response 
 

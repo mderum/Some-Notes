@@ -8,3 +8,6 @@ MONGO_INITDB_ROOT_PASSWORD
 
 --name is any name of iamge -p is port  -e vars  -d download this image followed by version 
 docker run --name sequel_my -p 3306:3306 -e MYSQL_ROOT_PASSWORD=password -d mysql
+
+to acccess this image in docker 
+docker exec -it sequel_my mysql -u root -p

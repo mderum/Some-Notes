@@ -1,125 +1,99 @@
-spring.dataSource.url=jdbc:mysql://xxx.xxx.xxx.xx:3306/dbName
-spring.dataSource.username=user
-spring.dataSource.password=pass
-spring.dataSource.driverClassName=com.mysql.cj.jdbc.Driver
+Using postgreSQL and Mysql 
 
 
-source2.dataSource.url=...
+pom.xml  ->>dep needed for different dbs 
 
-..
-..
+       <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
-@Configuration 
-class DataConfig{ 
-
-  @Bean(name="sourceA")
-  @ConfigurationProperties(prefix="spring.dataSource")
-  DataSourceProperties getSourceAProps(){  return new DataSourceProperties(); }
-
-  @Bean(name="SourceB" ) 
-  @ConfigurationProperties( prefix="source2.dataSource" ) 
-   return new DataSourceProperties(); 
-
-
-@Bean("dsA")
-DataSource getSourceADataSource( @Qualifier("sourceA")  DataSourceProperties dsp  //how to get a particular bean here a 2 are present use @Qualifier ) {
-return  dsp.initializeDataSourceBuilder().type(HikariDataSource.class) .build()
-
-}
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
 
 
 
-@Bean("dsB")
-DataSource getSourceBDataSource( @Qualifier("sourceB")  DataSourceProperties dsp  //how to get a particular bean here a 2 are present use @Qualifier ) {
-return  dsp.initializeDataSourceBuilder().type(HikariDataSource.class) .build()
-
-}
-
-
-
-jdbc template 
-
-@Bean("jdbcTemplate")
-JdbcTemplate getSourceAJdbcTemplate(  @qualifier("dsA") DataSource ds ) {
-
-return new JdbcTemplate(ds);
-}
+application.yml
+spring:
+  datasource:
+      postgres:
+         jdbcUrl: jdbc:postgresql:localhost:5432/dinerdb
+         username: root
+         password: pass
+         driver-class-name: org.postgresql.Driver  -> not necessary as already present in url 
 
 
+      mysql:
+         jdbcUrl: jdbc:mysql:localhost:3306/productdb
+         username: root
+         password: password
+         driver-class-name: com.mysql.cj.jdbc.Driver  -> not necessary as already present in url 
 
-summary: 
-
-Create a 
-
-DataSourceProperties with @bean("name")  and @ConfigurationProperties(prefix="2xpath")  return  new ()   //can be skipped to 2nd step directly 
-
-now create a DataSource with @Bean("name") use @Qualifier for correct DSP  return dsp.initilizeDataSourceBuilder().type(HikariDataSource.class).build(); 
-
-now create a jdbcTemplate use @Bean("name)  use @Qualifier for correct DS return new jdbcTemplate(ds); 
-
-
-@Qualifier("jdbcTemplate")
-@Autowired
-private JdbcTemplate jtemp;
+  jpa:
+    show-sql: true
+    defer-datasource-initialization: true  -> in case scripts are present
 
 
 
+Create DatasourceConfig for each 
 
+For mysql ->
 
-----------------------
-with jpa 
-
-@EnableJpaRepository(
-basePackage="com.x.y , 
-entityManagerFactoryRef="primaryEntityManagerFactory",
-transactionManagerRef=""
-)
 @Configuration
-@EnableTransactionManagement
-sourceAConfig{
+@EnableTransactionManagement  -> enable Txns
+@EnableJpaRepository{   --> needed for multiple DB setups if arch are diffferent
+  basePackages = "com.hmvCorp.entity.ms" ,  -> where to scan repo interfaces
+  entityManagerFactoryRef = "mysqlEMFB" , EM and TM refrences
+  trnasactionManagerRef = "mysqlTM"
+}
+public class DataSourceConfigMs {
 
-@Bean
-@configurationProperties(prefix 
-getSourceADSP()
+Configure datasource 
 
-
-getSourceADS()
-
-
-@Bean  //methods name == bean name in qualifier 
-LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory( EMFBuildeer ) 
-
-
-@Bean 
-PlatformTxnManager (primaryEntityManagerFactory)  return jpatxnmanager(PEMF)
+@ConfigurationProperties( prefix = "spring.datasource.mysql" )
+@Bean( "mysqlDS" )
+public DataSource mysqlDataSource(){
+    return DataSourceBuilder.create().build();
 
 
+configure EM using above DS 
+
+@Bean( "mysqlEMFB")
+public LocalContainerEntityManagerFactoryBean ( EntityManagerFactoryBuilder builder , 
+   @Qualifier( "mysqlDS") DataSource dataSource ) {
+
+  return builder.dataSource( dataSource )
+                .packages( "com.hmvCorp.entity.ms" )  --> where to scan entity
+                .persistenceUnit( "mysqlPU" )  -> requied in multiple DB setup 
+                .properties( Map.of( "hibernate.hbm2ddl.auto", "create-drop" 
+                                      "hibernate.format_sql" , "true" )  )
+                .build();
+
+
+
+confiure TM 
+
+@Bean( "mysqlTM" ) -> use this on @Transactional( value= "mysqlTM" ) in service or dao
+public PlatformTransactionManager mysqlTransasctionManager( 
+@Qualifier("mysqlEMFB) EntityManagerFactory emf  --> although it is a LCEMFB as it implements EMF ) {
+
+      return new JpaTransactionManager(emf); 
+}
+
+
+@Primary
+@Bean( "mysqlJdbcTemplate" )
+public JdbcTemplate jdbcTemplate( @Qualifier("mysqlDS") DataSource datasource ) {
+
+  return new JdbcTemplate(datasource); 
 
 }
 
 
-use @Transactional("primaryEntityManager")
+
+Similar configs for postgresql with DataSource , LCEMFB and PTM , Jdbc template 
 
 
-
-----------------------
-Load data on startup 
-
-
-auto loads schema.sql and data.sql 
-
-for multiple schemas and data 
-
-
-getSourceADS() 
-
-sourceADataSourceInitializer( @Qualifier("sourceADS")  DataSource) 
-{
-  ResourceDataBasePopulator rDBp = new 
-rDBp.addScript(  new Class Path Resource )
-
-DSI = new DSI 
-dsi.setDS  .setDP
-return 
-
-}

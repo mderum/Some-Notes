@@ -22,6 +22,7 @@ spring:
                                 -> authorize
                                 .requestMatchers("/ping/**").hasRole("ADMIN")
                                 .requestMatchers("/user/**").hasRole("USER","ADMIN")
+                                .requestMatchers("/public/**").permitAll()  ->> permits all , without login 
                                 .anyRequest()
                                 .authenticated())
                         .httpBasic(Customizer.withDefaults())  --> without this popup of login wont come 

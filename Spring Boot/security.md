@@ -17,12 +17,17 @@ spring:
            without it spring will apply default rules.
         
         > create a  @Congifuration class  @Bean returning SecurityFilterChain accepts (  HttpSecurity http )
-             > htttp.authoriseHttpRequest(  request ->  request.
-                  requestMatchers(  "/urlPattern/**" ).hasRole( "ROLE_TYPE" )
-    
-         ) .anyRequest().authenticated() ) .httpBasic();
-    
-        return http.build();
+                http.authorizeHttpRequests(
+                        authorize
+                                -> authorize
+                                .requestMatchers("/ping/**").hasRole("ADMIN")
+                                .requestMatchers("/user/**").hasRole("USER","ADMIN")
+                                .anyRequest()
+                                .authenticated())
+                        .httpBasic(Customizer.withDefaults())  --> without this popup of login wont come 
+                        .csrf(AbstractHttpConfigurer::disable); 
+        
+                return http.build();
 
 
 4. create a @Bean of UserDetailsService() {
@@ -31,7 +36,7 @@ spring:
            logout once logged in , data needs to be deleted from session or through spring http request 
 
             UserDetails = User.withUserName("kk").
-               password( passwordEncoder().encode("1234") )
+               password( passwordEncoder().encode("1234") )  -> encoding is must with spring 5
                .roles("USER").build();
         
           return new InMemoryUserDetailsManager(kk,xyz);

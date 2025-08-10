@@ -39,6 +39,11 @@ creates a proxy of the bean (service class or any other where annotation is used
 > unbind connection > reset auto -commit to original settings 
 
 
+rollback happens for only unchecked or runtime exceptions , 
+sometimes even if noRollBackFor is added for a exception it might roll back changes 
+because the actual exception may be wrapped in some other exception
+like SQLSyntaxException is wrapped with springs DataAccessException
+
 ------------
 Projection api -> 
  return only specific fields without exposing all entity details in response 

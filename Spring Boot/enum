@@ -1,0 +1,13 @@
+default values for in enum type 
+
+@Column( name= "dinerType" , columnDefination=" VARCHAR(20)  DEFAULT 'FIVESTR' "
+@Enumerated( Enum.STRING or ENUM.ORDINAL ) 
+
+
+----
+
+ENUM DINER_TYPES{
+
+LOCAL(1,"LOCALREST" -> display name in response json )
+
+}

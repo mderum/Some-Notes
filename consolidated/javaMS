@@ -1,0 +1,930 @@
+Difference between Authentication & Authorization
+
+Authentication -> who are you   
+Authorization -> perimissions 
+
+ 
+#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **
+#### **Decomposition Patterns**
+
+
+#### **#### **#### **#### **#### **#### **
+* **Decompose by Business Capability		Each service = one capability (e.g., Orders, Catalog, Payments, Shipping, Customer Support)./autonomous teams.
+											implecations --> ownerships , integration is tought, transaction managemenet , scale , deploy, monitoring 
+
+
+#### **#### **#### **#### **#### **#### **
+* **Decompose by Subdomain (Domain Driven Design)**			 split system into subdomains ( core , supporting , others  ) 
+
+
+Example: E-commerce (practical mapping)
+
+Business capability split: Catalog Service, Search Service, Order Service, Payment Service, Shipping Service, Customer Service, Pricing/Offers Service.
+
+DDD subdomain split:
+
+Catalog Bounded Context (product descriptions, categories, attributes).
+
+Pricing Bounded Context (pricing rules, discounts, promotions).
+
+Ordering Bounded Context (orders, order lifecycle, aggregate invariants).
+
+Payment Bounded Context (payment processing, settlement).
+
+Shipping Bounded Context (fulfillment, tracking).
+
+Notice: Pricing could be a separate bounded context (complex rules), even if Product catalog and Pricing are a single “capability” to users — DDD would separate them if their models differ.
+
+**
+
+
+#### **Integration Patterns** #### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **
+
+
+#### **#### **#### **#### **#### **####
+* **API Gateway**
+central control , less exposure to all services, cross-cutting concerns 
+A single entry point for all client requests to your microservices.
+It sits in front of your services and handles:
+no business logic here only a router 
+one request ---> one service 
+Edge layer 
+
+1.Routing (send request to correct microservice)
+
+2.Authentication & Authorization
+
+3.Rate limiting
+
+4.Load balancing
+
+5.Logging & monitoring
+
+6.Request/response transformation
+
+CONS: SOF , latency increase , complex 
+
+
+examples 
+Spring Cloud Gateway (Java)
+
+Netflix Zuul (older)
+
+Kong, Apigee, AWS API Gateway, Nginx
+
+#### **#### **#### **#### **#### **#### **
+* **Aggregator / Composite**
+One request ----> multiple services ----> Merged response  
+has business logic here 
+A controller basically 
+
+example : A dashboard with data from multiple services ( waller _ user _ orders ) 
+
+It is inside gateway or a service
+
+PROS : fewer calls , simple client , cache , perfomance 
+
+CONS : heavy logic , increase latency , feedback needed if any service goes down.
+
+
+
+#### **#### **#### **#### **#### **#### **
+* **Client-Side Load Balancing**
+
+client decides which service to call  ( client is web or app etc )
+
+No middleware 
+Client ---> Service Registry(Eureka)  --> get all listener  >>  choose one (round robin / random ) -> call that 
+
+
+Spring Cloud + Eureka + Ribbon (old)
+
+Spring Cloud + Eureka + LoadBalancer (new)
+
+gRPC clients
+
+Service mesh sidecars (Envoy uses similar idea)
+
+
+PROS: fast , no SOF , Retries/ CB can be added 
+
+CONS: heavy client , SD logic  , network complexity , not suitable for mobile apps or browser ( as they cant impl the logic of retries an SD 
+and ip can not be exposed to public ) 
+
+
+-if not using eureka server , all configs need to be put in yml of all services.
+
+
+
+#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **
+#### **Database Patterns**
+
+#### **#### **#### **#### **#### **#### **
+* **Database per Service**
+Separate DB - loose coupling , scaling  encapsulation , ployglot persistence ( service can choose different DB and structure ) 
+
+
+CONS: Harder txn managemenet , duplicacy , delay in hops  
+
+
+#### **#### **#### **#### **#### **#### **
+* **Saga**
+
+Seq of local txn in multiple services ->> each perform its transaction and publish an event or call to next 
+
+If fails : execute compensation txn --> undo previous step 
+
+eventual consistency 
+
+types : 
+choreography ( event driven ) --> listen and act accordingly    A-> publishA event ->B listens and do process publishB event  > if failure >publish undo even
+hard to debug 
+
+orchestration  -> one service calls each service 
+basically a controller  where all logic is placed 
+easy to debug 
+
+
+PROS: no 2 phase commits / per service DB / 
+
+Cons: not ACID  / complex failure handling - debugging 
+
+
+
+#### **#### **#### **#### **#### **#### **
+* **CQRS**
+
+Commnand Query Responsiblity Segregation 
+
+Fast , scailing  , good for event Sourcing + SAGA 
+
++-----------+        +------------+
+| Write API | -----> | Write DB   |
++-----------+        +------------+
+         | Events
+         v
++-----------+        +------------+
+| Read API  | <----- | Read DB    |
++-----------+        +------------+
+
+
+CONS: complex, read may lag , repliation logic or platfrom needed 
+
+
+
+#### **#### **#### **#### **#### **#### **
+* **Event Sourcing**
+Final object is not stored but events on it are stored. 
+so current state can be build by replaying the events
+
+
+
+#### **Resilience Patterns**
+
+#### **#### **#### **#### **#### **#### **
+* **Circuit Breaker**
+prevent cascading failures , fail fast ( user exp better ) , auto recovery 
+
+can be used for ---> high latency , slow/unreliable , outages , remote calls 
+STATES ->  CLOSED  OPEN  HALF_OPEN 
+
+
+add resilience4j spring boot3   , SERVICE_CLASS @CircuitBreaker(name = "paymentService", fallbackMethod = "paymentFallback")
+prop - 
+slidingWindow  check last x number of calls 
+
+failureRateThreshold x% -> % of calls from slidingWindow to account for the failure ( SW-10  FRT 50 , 5 fails  opens the circuit ) 
+
+waitDurationInOpenState xs --> seconds in open state 
+
+permittedNumberOfCallsInHalfOpenState x  --> number of calls in halfOpen state  ( if all x success close the circuit )
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      paymentService:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+
+
+
+#### **#### **#### **#### **#### **#### **
+* **Bulkhead**
+
+isolating resources so one service or one function cannot exhaust all resources and bring everything down.
+
+
+resilience4j:
+  bulkhead:
+    instances:
+      paymentBH:
+        maxConcurrentCalls: 5   -5 max request 
+        maxWaitDuration: 0
+  thread-pool-bulkhead:
+    instances:
+      inventoryBH:
+        maxThreadPoolSize: 10   -max thread for this service 
+        coreThreadPoolSize: 3  -- min reserved
+        queueCapacity: 5    --waiting queue size 
+
+
+
+@Bulkhead(name = "paymentBH", fallbackMethod = "paymentFallback")
+public String callPayment() {
+    return paymentClient.process();
+}
+
+@ThreadPoolBulkhead(name = "inventoryBH", fallbackMethod = "inventoryFallback")
+public String callInventory() {
+    return inventoryClient.check();
+}
+
+
+semaphore --> limits concurrent calls 
+
+| Feature                    | Semaphore Bulkhead         | Thread-Pool Bulkhead         |
+| -------------------------- | -------------------------- | ---------------------------- |
+| Isolation                  | ❌ No (uses caller threads) | ✅ Yes (separate thread pool) |
+| Overhead                   | Low                        | Medium                       |
+| Queue support              | ❌ No                       | ✅ Yes                        |
+| Slow downstream protection | ❌ Weak                     | ✅ Strong                     |
+| Good for                   | Fast calls                 | Slow I/O calls               |
+| Fallback timing            | Immediate                  | When pool & queue full       |
+
+
+
+threadpool separate thread pool for each service as needed 
+
+
+* **Retry**
+
+Idempotent = safe to retry multiple times without changing the final result.
+
+retry only on idempotent
+temporary issues (network glitch, timeout, 500), the caller automatically retries with a delay instead of failing immediately.
+
+resilience4j:
+  retry:
+    instances:
+      paymentRetry:
+        maxAttempts: 3
+        waitDuration: 2s
+        retryExceptions:
+          - java.io.IOException
+          - org.springframework.web.client.ResourceAccessException
+
+
+@Retry(name = "paymentRetry", fallbackMethod = "paymentFallback")
+public String makePayment() {
+    return restTemplate.getForObject("http://payment-service/pay", String.class);
+}
+
+
+ex: payment systems , notification servcies , inv updates 
+
+
+
+
+#### **#### **#### **#### **#### **#### **
+* **Timeout**
+if process takes longer then timeout to 
+prevent resources exhaustion ,
+ slowing of whole servives 
+or to prevent thread blocking
+
+
+resilience4j:
+  timelimiter:
+    instances:
+      paymentTimeout:
+        timeoutDuration: 2s
+
+
+
+
+
+@TimeLimiter(name = "paymentTimeout")
+@CircuitBreaker(name = "paymentCB", fallbackMethod = "paymentFallback")
+public CompletableFuture<String> callPayment() {
+
+    return CompletableFuture.supplyAsync(() ->
+        restTemplate.getForObject("http://payment/pay", String.class)
+    );
+}
+
+
+
+
+#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **
+#### **Cross-cutting Patterns**
+
+* **Service Registry / Discovery**
+
+* **Strangler Fig**
+
+
+
+
+
+#### **#### **#### **#### **#### **#### **
+* **Sidecar Pattern**
+
+adds extra container/capability to your servies without altering the code
+
+like SD , loggers , metrics , ETC 
+
++-----------------------------+
+|         Pod (K8s)          |
+|                             |
+|  +-----------------------+  |
+|  |   Microservice (App)  |  |
+|  +-----------------------+  |
+|                             |
+|  +-----------------------+  |
+|  |   Sidecar (Helper)    |  |
+|  +-----------------------+  |
++-----------------------------+
+
+
+
+//logs are saved in a path and later picked by logger sidecar and printed in other container 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: payment-pod
+spec:
+  containers:
+    - name: payment-service
+      image: payment-service:1.0 ===jars 
+      ports:
+        - containerPort: 8080 
+      volumeMounts:
+        - name: log-volume
+          mountPath: /logs
+
+    - name: logging-sidecar
+      image: log-forwarder:1.0  ====jars 
+      volumeMounts:
+        - name: log-volume
+          mountPath: /logs
+
+  volumes:
+    - name: log-volume
+      emptyDir: {}
+
+
+
+
+
+
+
+
+
+
+---------------
+
+what if application properties or yml is missing 
+- if placeholders not used any where it wont crash 
+- if both are present , precedence is given to properties. 
+
+
+
+
+#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **
+------ AWS -----------------------------------------
+
+
+
+
+#### **#### **#### **#### **#### **#### **#### *
+Lambda
+
+                      +------------------------+
+                      |      AWS Cloud         |
+                      |                        |
+                      |   +----------------+   |
+Trigger (SQS/S3/API) ---> |   Lambda        |   |
+                      |   | (Java JAR)     |   |
+                      |   |                |   |
+                      |   |  +----------+  |   |
+                      |   |  |  Logic   |  |   |
+                      |   |  | (Handler)|  |   |
+                      |   |  +----------+  |   |
+                      |   |   Runtime Env |   |
+                      |   |  (Java 17 etc)|   |
+                      |   +----------------+   |
+                      |                        |
+                      +------------------------+
+
+
+
+
++--------------------------------------------------+
+
+|                     Lambda                       |
+|--------------------------------------------------|
+|  Runtime Environment (Java 11/17)                |
+|  - Memory (e.g., 512MB)                          |
+|  - Timeout (e.g., 15 sec)                        |
+|  - IAM Role                                      |
+|                                                  |
+|  Deployment Package                               |
+|  +--------------------------------------------+  |
+|  |   my-lambda.jar                             | |
+|  |   - Handler class                           | |
+|  |   - Business logic                          | |
+|  |   - Dependencies                             | |
+|  +--------------------------------------------+  |
+|                                                  |
+|  Executes ONLY when Trigger fires                |
++--------------------------------------------------+
+
+
+
+                     [Event Trigger]
+    (SQS msg)  (API call)  (S3 upload)  (Cron)
+          \        |          |          /
+           \       |          |         /
+            \      |          |        /
+             \     |          |       /
+              +-----------------------+
+              |      AWS Lambda       |
+              |   (Java JAR inside)   |
+              +---------+-------------+
+                        |
+                        v
+                 +-------------+
+                 |   Handler   |
+                 |  executes   |
+                 +-------------+
+                        |
+                        v
+               [Output / DB / API call]
+
+
+
+CI CD 
+
+Developer Pushes Code
+          |
+          v
+   +------------------+
+   |   CI Pipeline    |
+   |  (GitHub/Jenkins)|
+   +--------+---------+
+            |
+   Build -> Test -> Scan
+            |
+            v
+   +----------------------+
+   |   Docker Image       |
+   |   Uploaded to ECR    |
+   +-----------+----------+
+               |
+               v
+      +----------------+
+      |   CD Pipeline  |
+      | (ECS/EKS/Lambda)|
+      +--------+-------+
+               |
+        Deploy to Prod
+
+
+#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **
+
+
+SPlunk (security monitoring (SIEM). and log analytics ) (Central place for logs, alerts, dashboards.)  and new relic (APM - application performance managemenet -Tracks latency, errors, slow DB calls, JVM metrics. )
+
+
+
+
+#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **
+
+Kafka
+
+
+
+Brokers contains the partitions data and replicates or stay in sync with leader.
+
+		Broker 1 	Topics {  partitions 0,1,2  }
+		Broker 2 	Topics {  partitions 0,1,2 }
+		
+
+		partitions -> think them of multiple road/lanes going toward the same destination
+		
+		
+Kafka Partition Analogy: Roads & Cars
+
+Topic → Highway system to a city (destination).
+
+Partitions → Lanes on the highway.
+
+Each lane carries cars (messages) in order.
+
+Cars (messages) → Travel in one lane only, not all lanes.
+
+Keyed messages → Car must stay in the same lane (e.g., all messages for UserID 101 go in lane 1).
+
+Non-keyed messages → Cars distributed across lanes (round-robin) to balance traffic.
+
+Replication → Each lane has a backup lane on another highway for safety (if a lane is blocked, backup takes over).
+
+
+? how resilience is maintained  Replication, Leader Election , Acknowledge ment ( from Leader , no ack, from all ) , 
+in sync replicas , messages are written on disk  if broker restart or break data is lost. 
+consumer tracks offset to keep track/prevent loss of message.	
+		
+		
+		
+same message failing multiple times
+use DLQueue 
+add retry logic ( main , retry with delay  , dLQ)
+processing should be idempotent -> same mesage should be processed multiple times without any issue 
+add validations to drop or ignore the invalid messages 
+commit offset only after successful processing  else put to DLQ 
+error handling to prevent blocking of other messages in the queue
+
+
+
+
+
+
+
+
+------------------------
+beans patterns in spring application 
+
+- by deafult the pattern is singleton 
+- some places like @Transactional  uses proxy pattern
+
+
+Prototype 
+- each call gets its ok set of instance , mutation is prevented  , private data 
+
+Request 
+- each http request create a new instance 	, payment info in multi service for a http request 
+
+Session 
+@Component
+@Scope(value = WebApplicationContext.SCOPE_SESSION)  -> cart system , per user 
+
+
+
+application – One instance per ServletContext.  
+-managed at the servlet container (Tomcat) level 
+-Cache Master Data (e.g., bank IFSC list, fee slabs, config)
+
+
+
+**Brief. Straight. No garbage.**
+
+### **1. Identify WHERE the slowness is**
+
+* Enable **Spring Boot Actuator** → `/actuator/metrics`, `/actuator/health`.
+* Add **logging of request time** using Spring `HandlerInterceptor`.
+
+### **2. Check API-level slowness (Java/Spring Boot)**
+
+* **Thread pool exhaustion** → Check:
+
+  * Tomcat threads: `server.tomcat.max-threads`
+  * Async executors blocking.
+* **Heavy JSON serialization** → Use Jackson after profiling, avoid deep nested objects.
+* **Expensive loops / stream operations** → Optimize code hotspots.
+* **External API calls** → Add timeouts:
+
+  ```java
+  webClientBuilder.build()
+      .get()
+      .uri(url)
+      .retrieve()
+      .bodyToMono(...)
+      .timeout(Duration.ofSeconds(3));
+  ```
+* **GC pressure** → Check logs; reduce object creation.
+
+### **3. DB-level slowness**
+
+* **Enable SQL logging**:
+
+  ```properties
+  spring.jpa.show-sql=true
+  logging.level.org.hibernate.SQL=DEBUG
+  logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+  ```
+
+* Find:
+
+  * Full table scans
+  * Missing indexes
+  * Huge joins
+  * N+1 queries
+
+* **Fix by**:
+
+  * Add proper **indexes**.
+  * Rewrite slow queries.
+  * Use **pagination**.
+  * Use projections instead of full entities.
+
+### **4. Measure DB query performance**
+
+* Use:
+
+  * MySQL: `EXPLAIN ANALYZE <query>`
+  * PostgreSQL: `EXPLAIN (ANALYZE, BUFFERS)`
+
+### **5. Connection pool issues**
+
+* Check **HikariCP**:
+
+  ```properties
+  spring.datasource.hikari.maximum-pool-size=20
+  spring.datasource.hikari.connection-timeout=30000
+  ```
+* Symptoms:
+
+  * Too few connections → API slow
+  * Connection leak → block all threads
+
+### **6. Profiling tools**
+
+* **Java Flight Recorder**
+* **VisualVM / JProfiler**
+* **Spring Boot Actuator metrics**
+* **Micrometer + Prometheus + Grafana**
+
+Look for:
+
+* High CPU methods
+* Blocking I/O
+* Excessive GC
+
+### **7. Caching**
+
+If repeated queries/API hits → add:
+
+* Spring Cache (Redis)
+* Local Caffeine cache
+
+### **8. Fix approach (step-by-step)**
+
+**Step 1:** Check API response time in logs
+**Step 2:** Check logs of SQL execution time
+**Step 3:** Profile service layer
+**Step 4:** Run EXPLAIN on slow queries
+**Step 5:** Fix missing indexes
+**Step 6:** Tune HikariCP
+**Step 7:** Tune threads / memory
+**Step 8:** Implement caching
+**Step 9:** Add timeouts / circuit breakers (Resilience4j)
+
+### **9. Real production checklist**
+
+* GC logs enabled
+* DB slow query log enabled
+* 95 & 99 percentile latency monitoring
+* Thread dump analysis (`jstack`) when API hangs
+* Heap dump if memory leak suspected
+
+ 
+ 
+ -------------------------------------------------
+ 
+ Inceptors and filters 
+ 
+ intercepts the request and response in spring mvc 
+ -works at controller level ( before and after) 
+ -org.springframework.web.servlet.HandlerInterceptor
+ 
+ HandlerInterceptor` 
+	- preHandle() boolean  -
+	-postHandle() void  - if unhandled exception occurs this will not run 
+	-afterCompiling()  void   - runs after response is returned even on exception
+	
+	
+How ? 
+
+-create a interceptor( can have all methods ) 
+ Your class @Component   implements the HandlerInterceptor` 
+ 
+ @Override boolean preHandle( HttpServletRequest / Response  , Object handler )  return 
+ 
+ 
+ - register in InterceptorRegistry 
+ 
+ Your @Configuration  implements WebMvnConfigurer 
+ 
+	@Overhead addInceptors( InterceptorRegistry )  registrt .addInceptors(  new YourComponentClass() )
+			.addPAthPattern("/api/*") .excludePatterns("api/auth/*")\
+			
+			
+
+Client
+ →
+Servlet Filter
+ →
+DispatcherServlet
+    →
+    HandlerMapping
+        →
+        HandlerInterceptor.preHandle()
+        →
+        Controller
+        →
+        HandlerInterceptor.postHandle()
+        →
+        View rendering
+        →
+        HandlerInterceptor.afterCompletion()
+ →
+Response
+
+
+ -------------------------------------------------
+
+javax.servlet.Filter
+
+-part of servlet api 
+- at tmocat level 
+- works on all requests 
+
+
+- init() -dofilter()  -destory() 
+
+| Method       | Exception behavior                                                         |
+| ------------ | -------------------------------------------------------------------------- |
+| `init()`     | Startup failure if exception thrown. Filter may not load.                  |
+| `doFilter()` | Request aborted; must catch exceptions manually. No guaranteed after hook. |
+| `destroy()`  | Logged by container; nothing else happens.                                 |
+
+
+
+How? 
+
+Your @Component  implements Filter 
+
+
+void init(FilterConfig ) 	
+
+
+@Override void doFilter( ServletRequest/Response , FilterChain ) throws IOException , ServletException 
+
+		(HttpServletRequest) request - can be casted 
+		--can extract headers etc here 
+		
+		return false; //block 
+		or pass 
+		
+		FilterChain.dofilter(req, res);// OG req res in params not casted 
+
+
+void destroy()		
+
+
+-When to use interceptor- allow controller only if business rule is passed  (Role based auth / Context setup / Audit per api / validation / toggles / rate limit )  or Filters - Rejects before it enters SPRING( Auths /jwt api parsing ,  CORS / logging / Encoding and compresssion /  XSS input sanitzation 
+ /perfomance timing  /security headers ) 
+
+
+
+
+
+-----------------java 17 
+
+sealed classes 
+sealed class payment permits Card . Upi {}   -> restricted inheritence 
+
+
+
+pattern matching 
+
+obj instanceOf  String  
+OR obj instanceOf String s
+
+
+
+Switch 
+
+int day=1;
+
+switch( day ) {
+
+case 1 -> Mon;
+deafult -> Sunday;
+
+}
+
+
+
+
+Text Block 
+
+Multi Line Strings 
+
+String s= """
+ Hello %s
+ World 
+ """.formatted(john)
+ 
+ 
+ 
+ 
+ 
+------------------------GC_-----------------------
+
+Frees heap memory - mark unreachable /	remove unused /  compact ( defrag ) 
+
+Heap Areas: 
+
+young- minor GC - Eden(new) objects , surviours 
+Old Gen - Major/Full GC  - Long lived /promoted objects  -XX:MaxTenuringThreshold
+Meta Space - (non heap) - class metadata - native memory - dynamic -X:MaxMetaspaceSize 
+
+
+Young Gen - > Eden all new objects 
+now after 1 new scan  copied either in S0 or S1. 
+then  in next scan, copied in S0 or S1 ( only one space) 
+
+Objects are moved from S0 to S1 ( from -> to flow )
+why two spaces as for moving and increasing age and ref 2 spaces are needed.
+
+
+Eden A 
+Eden B (a=add100) , S0 A (add=100)
+Eden B (a=add100) , S1 A (add=200 , forwardingPointer=100)
+
+GC completes 
+updated references 
+
+
+
+----------------------
+
+
+Making async api 
+
+@EnableAsync on main Application class
+
+
+@Service
+
+	@Async method in service 
+	return CompletableFuture<String>   CompletableFuture.completedFuture( callYourMethodHere() );
+	
+	
+	Customize Aync Thread pool 
+	@Configuration 
+		@Bean (name ="xyz" )
+		Executor xyz(){
+		
+		TPTE  corePoolSize ,maxPoolSize ,QueueCapacity ,ThreadNamePrefix , initialise() 
+		
+		}
+
+----------
+ai basics , gen ai  ,  agentic ai, gen ai impl
+-
+
+------------------
+
+upgrade ------------------
+spring 5.3  
+java 8 needed 
+
+spring-integration-jdbc 5.5.x 
+
+spring-security-oauth2 depreciated use spring-security-oauth2-resource-server
+
+validation-api 2.0.1.Final and hibernate-validator use 6.2.x 
+
+mysql-connector-java 8.0.33 
+
+commons-loggins removed , use spring-jcl 
+
+
+replace imports from springframework orm hibernate4 to 5 
+(spring-orm 5.3.x)
+
+. C3P0 is depreciated  c3p0.max_StatementsPerConnection to maxStatementsPerConnection
+
+
+use hikariDS  DriverManger DS is depreciated
+
+
+VelocityEngineFactory removed from spring 5.3.x
+(Integrate Velocity templates into Spring MVC applications.) 
+
+
+ControllerClassNameHandlerMapping maps URLs from controller class names
+
+UserController → /user*
+
+setInterceptors(...) applies LocaleChangeInterceptor to all such requests
+
+
+"E:\sw\jdk1.8.0_202\jre\bin\keytool.exe" -import -trustcacerts -alias maven-central -file "C:\Users\Aradhya\maven.cer" -keystore "E:\sw\jdk1.8.0_202\jre\lib\security\cacerts"
+
+

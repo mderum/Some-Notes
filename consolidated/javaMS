@@ -925,6 +925,21 @@ UserController → /user*
 setInterceptors(...) applies LocaleChangeInterceptor to all such requests
 
 
-"E:\sw\jdk1.8.0_202\jre\bin\keytool.exe" -import -trustcacerts -alias maven-central -file "C:\Users\Aradhya\maven.cer" -keystore "E:\sw\jdk1.8.0_202\jre\lib\security\cacerts"
+"E:\sw\jdk1.8.0_202\jre\bin\keytool.exe" -import -trustcacerts -alias maven-central -file "E:\sw\zsc.cer" -keystore "E:\sw\jdk1.8.0_202\jre\lib\security\cacerts"
+
+"C:\Program Files\Java\jdk1.8.0_xxx\bin\keytool.exe" -import -trustcacerts -alias zscaler-root -file zscaler-root.cer -keystore "C:\Program Files\Java\jdk1.8.0_xxx\jre\lib\security\cacerts"
 
 
+
+"E:\sw\jdk-17.0.14\bin\keytool.exe" -import -trustcacerts -alias mav-ctrl -file "E:\sw\iccm.cer" -keystore "E:\sw\jdk-17.0.14\lib\security\cacerts"
+
+
+"E:\sw\jdk-17.0.14\bin\keytool.exe" -import -trustcacerts -alias ma324rl -file "E:\sw\maven-17.cer" -keystore "E:\sw\jdk-17.0.14\lib\security\cacerts"
+
+
+"E:\sw\jdk-17.0.14\bin\keytool.exe" -list -keystore "E:\sw\jdk-17.0.14\lib\security\cacerts" -alias mav-ctrl
+
+
+
+for 17
+setx MAVEN_OPTS "-Djavax.net.ssl.trustStore=E:\sw\jdk-17.0.14\lib\security\cacerts -Djavax.net.ssl.trustStorePassword=changeit"

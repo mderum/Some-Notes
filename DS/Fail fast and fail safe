@@ -1,0 +1,17 @@
+Fail Fast  -> while iterating data is modified 
+>> detects the changes in data structure early and throws concurrent modification exception >ex: HashMap
+>> should use Iterator.remove() 
+
+Fail safe -> while iterating data is modified 
+>> no exception is thrown > uses Enumerations like in HashTable   hs.getKeys()  .hasMoreKeys();
+
+
+HashMap (unsync k,V structure                              | Hash Table 
+FailFast                                    Fail Safe
+Fast                                             Slow 
+Not thread safe- non sync (put,get)               Thread safe - synced ( 1 thread at a time 
+Nulls allowed- 1 each side                     nulls not allowed
+
+composed of:
+K,V,Hash,NodeNxt                          :K,V,Entry<> 
+modCount

@@ -943,3 +943,19 @@ setInterceptors(...) applies LocaleChangeInterceptor to all such requests
 
 for 17
 setx MAVEN_OPTS "-Djavax.net.ssl.trustStore=E:\sw\jdk-17.0.14\lib\security\cacerts -Djavax.net.ssl.trustStorePassword=changeit"
+
+
+
+
+--- spring boot
+--minimal configs or auto configs( automatically configures based on class path(jars available at runtime )  ,existing bean, properties )
+--starter dependencies ( dundles of dep ) ex: sb-starter-web ( brings -> web webmvc jackson validation logging tomcat ) 
+--exmbedded server ( default> tomcat , jetty -> starter-jetty , undertow , netty -webflux(non blocking) 
+-- prod ready features > actuator , profiles -dev/uat/prod , logging
+--microservice friendly > SD , dock, kube , server configs 
+--dep mgmnt 
+
+
+--auto config 
+@SpringBootApplication ( enableAutoConfiguration-> config based on props and classpath dep  , ComponentScan -> scan packages for components ,  Configuration -> classs is a source of bean defs
+

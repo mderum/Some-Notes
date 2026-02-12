@@ -959,5 +959,7 @@ setx MAVEN_OPTS "-Djavax.net.ssl.trustStore=E:\sw\jdk-17.0.14\lib\security\cacer
 --auto config 
 @SpringBootApplication ( enableAutoConfiguration-> config based on props and classpath dep  , ComponentScan -> scan packages for components ,  Configuration -> classs is a source of bean defs
 
-
+--indexes 
+Clustered -> data is physically sorted  according to the column used , 1 per table
+non clustered -> data is not physically sorted , is a key + pointer to actual row , multiple per table 
 

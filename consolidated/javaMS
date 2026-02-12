@@ -963,3 +963,19 @@ setx MAVEN_OPTS "-Djavax.net.ssl.trustStore=E:\sw\jdk-17.0.14\lib\security\cacer
 Clustered -> data is physically sorted  according to the column used , 1 per table
 non clustered -> data is not physically sorted , is a key + pointer to actual row , multiple per table 
 
+
+--hibernate 
+cache levels 
+L1 > default cant be disabled , sty in session level , not shared bw sessions 
+L2 > shared across sessions stys in Session manager level , stores entity data needs a provider like( EhCache, hazel cast) > enable in property > annnotate 
+Query level > cache the query results + L2 needed> stores IDs and fetches entites from L2
+
+| Feature | L1      | L2             | Query Cache   |
+| ------- | ------- | -------------- | ------------- |
+| Default | ✅       | ❌              | ❌         |
+| Scope   | Session | SessionFactory | Query Results |
+| Shared? | ❌       | ✅              | ✅         |
+| Stores  | Entity  | Entity         | Query result  |
+
+
+

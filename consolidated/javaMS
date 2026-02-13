@@ -503,7 +503,37 @@ SPlunk (security monitoring (SIEM). and log analytics ) (Central place for logs,
 
 #### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **#### **
 
-Kafka
+Kafka > distributed event streaming paltform 
+used for messaging , event driven  systems , async , log streaming 
+
+producer sends message --------> consumer reads  from topic 
+
+topic -> a channel   > splitted into partitions for parallel processing 
+
+broker -> server instances  { topics  }
+
+
+dep: spring-kafka 
+
+            Producer
+               │
+               ▼
+        ┌─────────────────┐
+        │   Kafka Cluster │
+        │                 │
+        │ Broker 1        │
+        │   └─ payments-p0│
+        │                 │
+        │ Broker 2        │
+        │   ├─ payments-p1│
+        │   └─ orders-p0  │
+        │                 │
+        │ Broker 3        │
+        │   └─ orders-p1  │
+        └─────────────────┘
+               │
+               ▼
+            Consumer
 
 
 
@@ -992,6 +1022,8 @@ Best practices for api design-----
 -- use DTOS 
 --loggings , monitoring 
 --documentation ,namings 
+
+
 
 
 

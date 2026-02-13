@@ -979,3 +979,14 @@ Query level > cache the query results + L2 needed> stores IDs and fetches entite
 
 
 
+
+Best practices for api design-----
+--use nouns not verbs ->  /users  , dont use create/get/make etc
+--proper http status codes 
+--proper versioning 
+--proper response strucute {  status , data , message } 
+--use pagination or sorting , send data in batches 
+
+
+
+

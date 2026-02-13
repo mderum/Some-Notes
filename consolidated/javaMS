@@ -986,6 +986,13 @@ Best practices for api design-----
 --proper versioning 
 --proper response strucute {  status , data , message } 
 --use pagination or sorting , send data in batches 
+--idempotent ( GET PUT DELETE , POST is not )  
+--error handling 
+--security  -> Validations ,auths, limits 
+-- use DTOS 
+--loggings , monitoring 
+--documentation ,namings 
+
 
 
 

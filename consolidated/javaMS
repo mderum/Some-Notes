@@ -1042,6 +1042,13 @@ Best practices for api design-----
        
        
        
+Linking (check validity , illegal access) (preparate allocate memmory - deafults) (resolution -> symbolic ref , method/field/class -> resolved)
+static blocks executed .(-----verify-prepare-resolve----) and loading - .class >mem > class object in heap  -
+
+
+
+LifeCycle 
+Object is created using constructor > Dep inj > Chance to do so work before ready > run its own startup logic  > in use > cleanup or destruction 
 
 
 

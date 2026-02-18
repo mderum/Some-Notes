@@ -1027,5 +1027,22 @@ Best practices for api design-----
 
 
 
+--Interface											Vs			 Abs 
+  pure contract<j8> deafult and static	j9>private 	|	abstract + concrete methods
+	No Constrctor									|  Constructor
+	Public static final constants only				| Variable instance
+	multiple inheritance 							|  single inheritance
+	-when sharing capability/behaviour				| -use when sharing common code/state
+													| 
+			both can have main methods 				| abs class is given priority over interface in method calls 
+			can create object using anony or lambda |
+			normal interface doesnt support lambda  |
+			maker interface is used to tag (serial
+			clonable RandomAccess) 
+       
+       
+       
+
+
 
 

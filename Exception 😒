@@ -4,17 +4,22 @@ Exception heirarchy:
 
         Throwable: -> a super class to all below provides utility methods for stack trace , message , cause 
 
+                protected Throwable(String message,
+                    Throwable cause,  -> chained exception 
+                    boolean enableSuppression,   -> enable suppression > store or not 
+                    boolean writableStackTrace) -> only message no lines , compacat to increase thruput
+
                 Errors -> issues beyond program control like stack overflow, out of mem , no class def found , bootstrap method error 
 
                 Exceptions: 
 
-                        Checked:
+                        Checked:  have to handle in code using try catch or auto close 
                 
                         IO Exception -> related to files , sockets , connections , host  , java.io
                         Reflective Ops -> illegal Access, class not found, no such method or field  , java.reflect
 
 
-                        Unchecked: 
+                        Unchecked:  
                         Runtime -> array and string index out of bound , null pointer , unsupported op, class cast , java.lang
         
 

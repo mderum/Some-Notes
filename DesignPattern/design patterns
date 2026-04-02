@@ -1,6 +1,46 @@
 Java 
 
 Singleton -> Only one instance, can be used for logging and configuration
+
+private constructor() like DB connection , config manager, shared cache , thread pools 
+
+impl: double locking thread safe:  not immune to reflection and deserialization 
+
+public class DBConfig{
+ private static volatile DBconfig instance ;
+
+public static DBConfig getInstance(){
+
+      if(instance == null )  {
+
+            synchronised(DBConfig.class) {
+                  if(instance == null) {
+                        instance = new DBConfig();
+                  }
+            }
+
+
+      }
+
+return instance;
+}
+
+}
+
+
+Enum method:  immune to reflection attacks and deserialization
+
+public enum DBConfig{
+      INSTANCE; 
+      private final String env = System.getenv("SECRET");
+      public String getEnv(){ return env;}
+
+}
+
+DBConfig.INSTANCE.getEnv();
+
+
+
 prototype -> creates new object by copying existing , when new ()  is expensive Ops
 Factory Method -> provides a interface for object creation , subclasses after implementing can alter the type 
 Builder Patter ->  Construct objects steps by step , usefull for object with many optional params 

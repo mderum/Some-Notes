@@ -28,7 +28,11 @@ return instance;
 }
 
 
-Enum method:  immune to reflection attacks and deserialization
+Enum method:  immune to reflection attacks and deserialization ,
+              JVM prohibits .newInstance() on enums IllegalArgumentException.
+
+     also serialized by their name on DESER calls Enum.valueOf(type,name) for lookup. 
+     nevers calls const() so no object creation 
 
 public enum DBConfig{
       INSTANCE; 

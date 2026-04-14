@@ -7,13 +7,13 @@ private constructor() like DB connection , config manager, shared cache , thread
 impl: double locking thread safe:  not immune to reflection and deserialization 
 
 public class DBConfig{
- private static volatile DBconfig instance ;
+ private static volatile  >> removes local caching in cpu cores >> DBconfig instance ;
 
 public static DBConfig getInstance(){
 
       if(instance == null )  {
 
-            synchronised(DBConfig.class) {
+            synchronised>>> prevents 2 thread from stepping on each other  >>(DBConfig.class) {
                   if(instance == null) {
                         instance = new DBConfig();
                   }

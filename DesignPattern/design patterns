@@ -47,6 +47,15 @@ DBConfig.INSTANCE.getEnv();
 
 prototype -> creates new object by copying existing , when new ()  is expensive Ops
 Factory Method -> provides a interface for object creation , subclasses after implementing can alter the type 
+  Define interface > various impl > let Factory class decide what to return. 
+
+centralised  object creation , easy extension 
+
+Factory and absfactory ( multiple factory
+
+
+
+
 Builder Patter ->  Construct objects steps by step , usefull for object with many optional params 
 Adapter -> incompatible interfaces to work together 
 

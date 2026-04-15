@@ -51,7 +51,10 @@ Factory Method -> provides a interface for object creation , subclasses after im
 
 centralised  object creation , easy extension 
 
-Factory and absfactory ( multiple factory
+Factory and absfactory ( multiple factory ) 
+
+interface Button { void render(); }
+interface Checkbox { void checkbox(); }
 
 
 

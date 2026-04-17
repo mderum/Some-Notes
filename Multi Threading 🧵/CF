@@ -1,1 +1,11 @@
 
+CompletableFuture<Void>  future = CompletableFuture.runAsync(()-> { });  no return in this method , 
+FI is runnable 
+
+future .get() > checkedException , try catch needed 
+       .join() > uncheckedException
+
+
+
+    .cancel(true)  > sets Thread.currentThread().isInterrupted()  true  
+    also throw Exception if Thread.sleep...InterruptedException

@@ -56,7 +56,7 @@ Factory and absfactory ( multiple factory )
 interface Button { void render(); }
 interface Checkbox { void checkbox(); }
 
-
+class windowsB implments Button{ void render(){ SOP:print("winB"); }  }
 
 
 Builder Patter ->  Construct objects steps by step , usefull for object with many optional params 

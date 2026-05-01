@@ -1,0 +1,5 @@
+Thread> class , can only extend 1 
+
+Runnable>  interface , better design , return void , task only , throws unchecked
+
+Callable>  returns value , throws checkedExceptions  >  execution +task

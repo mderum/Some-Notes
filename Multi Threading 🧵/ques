@@ -1,5 +1,28 @@
-Thread> class , can only extend 1 
+Thread> class , can only extend 1  , .start()
 
-Runnable>  interface , better design , return void , task only , throws unchecked
+Runnable>  interface , better design , return void , task only , throws unchecked , run()
 
-Callable>  returns value , throws checkedExceptions  >  execution +task
+Callable>  returns value , throws checkedExceptions  >  execution +task , .call() 
+
+-----
+Synchronized 
+
+method level > lock the whole method 
+
+block level > locks that block only 
+
+final Object lock = new Object() 
+
+Synchronised( lock ) {  >> using this as lock is risky , external code can touch it.
+
+
+ }
+
+
+--
+ExecutorService 
+.submit() Future (Exp wrapped in it ) > Runnable + Callable  > get a Future Back
+.execute() void (Exception on executor Thread)  > Runnable  > fire and forget 
+
+
+

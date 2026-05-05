@@ -33,8 +33,34 @@ Thread local
 ThreadLocal<Integer>  .get() .remove() .set() 
 > each TL owns its var no sharing ,  sync not  nedded 
 
+------------
+inside Synchronised block only {   else IllegalMonitorStateException  
+wait > release the lock and wait , current process cant proceed as limit/queue is full, other thread can acquire the lock or wait till 
+interuptted or recevied notify call  , 
+
+notify > notify a random thread  ,
+
+notifyAll > notify all threads  that lock can be accquired  
 
 
+use wake() only inside a loop > while{}   dont use in if { condition only checked once }
+
+**sometimes bcz of OS scheduling thread wake up automatically  > P OS IX
+
+
+
+use > BlockingQueue<Integer>  = new ArrayBlockingQueue<>(5)  > .put() .take()  a type of rate limitting 
+  LinkedBlockingQueue  > head and tail better than above 
+ PriorityBlockingQueue Task must implement > highest first 
+Synchorous Queue  direct handoff >  single task blocks untill taken , no buffer 
+
+Throughput (same load):
+
+LinkedBlockingQueue   ████████████████  ~best buffered  trading 
+ArrayBlockingQueue    ████████████░░░░  ~20-25% less  payment with safety 
+PriorityBlockingQueue ████████░░░░░░░░  O(log n) cost
+SynchronousQueue      ████████████████  best IF balanced trading 
+}
 
 
 --

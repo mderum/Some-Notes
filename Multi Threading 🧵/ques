@@ -18,6 +18,24 @@ Synchronised( lock ) {  >> using this as lock is risky , external code can touch
 
  }
 
+-------------------
+Volatile 
+
+immediate visible changes , directly read from main MEM, no CPU cache  
+> use for flags , dont use for counters 
+
+it says changes are visible immediately not the intermediate process
+
+--------
+
+Thread local 
+
+ThreadLocal<Integer>  .get() .remove() .set() 
+> each TL owns its var no sharing ,  sync not  nedded 
+
+
+
+
 
 --
 ExecutorService 

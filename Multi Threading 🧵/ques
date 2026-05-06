@@ -61,6 +61,16 @@ ArrayBlockingQueue    ████████████░░░░  ~20-25% 
 PriorityBlockingQueue ████████░░░░░░░░  O(log n) cost
 SynchronousQueue      ████████████████  best IF balanced trading 
 }
+--------------
+reentrance > j,u,c,l
+
+new ReentranceLock(true)  > logest waiting gets first 
+.tryLock() > true/false  without blocking 
+.tryLock(1,TimeUnit.Seconds) 
+.unlock()
+.lockInterruptibly  > use thread.interrupt() 
+
+
 
 
 --

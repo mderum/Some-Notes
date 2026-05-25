@@ -95,5 +95,46 @@ public JdbcTemplate jdbcTemplate( @Qualifier("mysqlDS") DataSource datasource ) 
 
 
 Similar configs for postgresql with DataSource , LCEMFB and PTM , Jdbc template 
+\
 
+
+---------
+
+
+## Multi-DB Setup (PostgreSQL + MySQL) — Spring Boot
+
+---
+
+**1. pom.xml** — add both drivers (runtime scope fine for MySQL)
+
+---
+
+**2. application.yml** — define two datasource blocks under `spring.datasource.mysql` / `.postgres`; `driver-class-name` optional
+
+---
+
+**3. Per-DB Config Class** (`@Configuration`)
+
+Each class needs:
+
+- `@EnableJpaRepositories` → point to repo package + ref EM & TM beans
+- `@EnableTransactionManagement`
+
+---
+
+**4. Three beans per DB:**
+
+| Bean | Type | Key detail |
+|---|---|---|
+| `DS` | `DataSource` | `@ConfigurationProperties` picks up yml block |
+| `EMFB` | `LocalContainerEntityManagerFactoryBean` | set packages, persistenceUnit, hibernate props |
+| `TM` | `PlatformTransactionManager` | wraps the EMFB (implements EMF) |
+
+Optional: `JdbcTemplate` bean per DS — mark one `@Primary`
+
+---
+
+**5. Usage**
+- `@Transactional(value="mysqlTM")` / `"postgresTM"` in service/DAO
+- Entities and repos in **separate packages** per DB — that's how Spring routes correctly
 
